@@ -149,13 +149,12 @@ Esto creará (si no existe) la base de datos soccer.db y almacenará los datos o
 
 + Automatizar la actualización periódica mediante tareas programadas.
 
-+ Crear una interfaz o dashboard para visualizar los datos.
-
 + Ampliar el modelo de datos para incluir jugadores y estadísticas individuales.
 
 + Permitir el histórico de datos para mantener los datos de años y temporadas anteriores.
 
 
 👥 Autores
+
 
 Proyecto desarrollado por Adrián García García, David Caraballo Bulnes, Pablo Baeza Gómez, Eva María García Gálvez.
