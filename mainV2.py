@@ -108,37 +108,6 @@ def get_df_efficients_teams(df):
     fig.show()
     return df_efficient_equipos
 
-def get_df_efficients_teamsV2(df):
-    # Ahora vamos a ver cuales son los equipos más eficientes, es decir,
-    # cuantos puntos por partido consigue cada equipo comparandolo con sus goles de diferencia
-    # habrá equipos que con poco gol de diferencia ganen más puntos que otros
-    df_efficient_equipos = df.drop(["wins", "draws"]) # Quitamos valores que no nos interesan como las victorias y los empates
-    df_efficient_equipos = df_efficient_equipos.with_columns([
-        (pl.col("goals_for") - pl.col("goals_against")).alias("goal_diff"), # Calculamos los goles de diferencia restadno los goles a fovr menos los goles en contra
-        ((pl.col("points") / pl.col("played")).alias("points_per_game")) # Calculamos los puntos por partido dividiendo los puntos por los partidos jugados
-    ])
-
-    # Una vez hecho los cálculos, los esribimos en un csv
-
-    df_efficient_equipos.write_csv("Equipos_Eficientes_GD_Puntos_Por_Partido.csv") 
-
-    # Luego lo pintamos en un scatter
-
-    fig = px.scatter(
-        df_efficient_equipos.to_pandas(),
-        x="goal_diff",
-        y="points_per_game",
-        color="name_league",
-        hover_name="name",
-        title="Goal Difference vs Points per Game",
-        trendline="ols" # Pintamos también la linea de tendencia de cada liga
-    )
-
-    # Podemos ver que la diferencia de goles y los puntos por partido tiene una correlación positiva, cuanto más diferencia de goles tengas, mayor puntos por partido obtienes
-
-    fig.show()
-    return df_efficient_equipos
-
 def get_df_goals_against_goals_for_teams(df):
     """
     Docstring para get_df_goals_against_goals_for_teams
