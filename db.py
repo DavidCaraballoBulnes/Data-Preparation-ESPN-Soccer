@@ -5,15 +5,15 @@ def create_tables():
     conn = sqlite3.connect("soccer.db")
     cursor = conn.cursor()
     cursor.execute(
-        "CREATE TABLE IF NOT EXISTS league (id INTEGER PRIMARY KEY, name TEXT, year INTEGER)"
+        "CREATE TABLE IF NOT EXISTS league (id_league INTEGER PRIMARY KEY, name_league TEXT, year INTEGER)"
     )
     conn.commit()
     cursor.execute(
-        "CREATE TABLE IF NOT EXISTS teams (id INTEGER PRIMARY KEY, name TEXT, logo TEXT, league_id INTEGER, FOREIGN KEY(league_id) REFERENCES league(id))"
+        "CREATE TABLE IF NOT EXISTS teams (id INTEGER PRIMARY KEY, name TEXT, logo TEXT, league_id INTEGER, FOREIGN KEY(league_id) REFERENCES league(id_league))"
     )
     conn.commit()
     cursor.execute(
-        "CREATE TABLE IF NOT EXISTS stats (id INTEGER PRIMARY KEY, team_id INTEGER, points INTEGER, played INTEGER, goals_against INTEGER, goals_for INTEGER, wins INTEGER, draws INTEGER, losses INTEGER, position TEXT, FOREIGN KEY(team_id) REFERENCES teams(id))"
+        "CREATE TABLE IF NOT EXISTS stats (id_stats INTEGER PRIMARY KEY, team_id INTEGER, points INTEGER, played INTEGER, goals_against INTEGER, goals_for INTEGER, wins INTEGER, draws INTEGER, losses INTEGER, position TEXT, FOREIGN KEY(team_id) REFERENCES teams(id))"
     )
     conn.commit()
     conn.close()
@@ -23,20 +23,20 @@ def insert_leagues(leagues):
     conn = sqlite3.connect("soccer.db")
     cursor = conn.cursor()
     prev_leagues = [
-        row[0] for row in cursor.execute("SELECT name FROM league").fetchall()
+        row[0] for row in cursor.execute("SELECT name_league FROM league").fetchall()
     ]
     if (leagues[0]) not in prev_leagues:
         cursor.execute(
-            "INSERT INTO league (name, year) VALUES (?, ?)",
+            "INSERT INTO league (name_league, year) VALUES (?, ?)",
             (leagues[0], leagues[1]),
         )
     else:
         update_league = cursor.execute(
-            "SELECT name, year FROM league WHERE name = ?", (leagues[0],)
+            "SELECT name_league, year FROM league WHERE name_league = ?", (leagues[0],)
         ).fetchone()
         if update_league[1] != leagues[1]:
             cursor.execute(
-                "UPDATE league SET year = ? WHERE name = ?",
+                "UPDATE league SET year = ? WHERE name_league = ?",
                 (leagues[1], leagues[0]),
             )
             cursor.execute("DELETE FROM stats")
@@ -51,7 +51,7 @@ def insert_teams(teams):
     prev_teams = cursor.execute("SELECT name FROM teams").fetchall()
     for team_name, team_data in teams.items():
         team_data["league"] = cursor.execute(
-            "SELECT id FROM league WHERE name = ?", (team_data["league"],)
+            "SELECT id_league FROM league WHERE name_league = ?", (team_data["league"],)
         ).fetchone()[0]
         if (team_data["nombre"],) not in prev_teams:
             cursor.execute(
