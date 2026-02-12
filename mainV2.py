@@ -188,3 +188,35 @@ global_avg = (
 )
 fig.add_hline(y=global_avg, line_dash="dash", line_color="black")
 fig.show()
+
+
+def show_avg_league_goals(df):
+    """
+    Docstring para show_avg_league_goals
+
+    Método para mostrar gráficamente la media de los goles por partido por cada liga.
+    
+    :param df: DataFrame con los datos a tratar y graficar
+    """
+    df_goals_league = df.drop(["name", "wins", "goals_for", "points", "draws"])
+    avg_league_matches_goals = df_goals_league.group_by("name_league").mean()
+    avg_league_goals = avg_league_matches_goals.with_columns((pl.col("goals_against") / pl.col("played")).alias("avg_league_goals"))
+    fig = px.pie(avg_league_goals, values='avg_league_goals', names='name_league', title='Media de goles por liga')
+    fig.show()
+
+def show_avg_league_match_pts(df):
+    """
+    Docstring para show_avg_league_match_pts
+
+    Método para mostrar gráficamente la media de puntos que se consiguen por partido en cada liga.
+
+    :param df: DataFrame con los datos a tratar y graficar
+    """
+    df_pts_league = df.drop(["name", "wins", "goals_for", "draws", "goals_against"])
+    avg_league_pts = df_pts_league.group_by("name_league").mean()
+    avg_league_matches_pts = avg_league_pts.with_columns((pl.col("points") / pl.col("played")).alias("mean_league_pts_match"))
+    fig = px.pie(avg_league_matches_pts, values='mean_league_pts_match', names='name_league', title='Media de puntos por partido de cada liga')
+    fig.show()
+
+show_avg_league_goals(df)
+show_avg_league_match_pts(df)
