@@ -23,7 +23,7 @@ def get_df_victory_draw_for_league(df):
 
     Este método nos permite visualizar las victorias y empates por ligas
     
-    :param df: Descripción
+    :param df: DataFrame con los datos a tratar y graficar
     """
     # Nos quedamos solo con los datos que nos interesan
     # que son los partidos jugados para hacer el porcentaje, las victorias, empates, y el nombre de la liga
