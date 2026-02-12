@@ -17,8 +17,14 @@ query = "SELECT name, played, wins, draws, points, goals_against, goals_for, nam
 # Leer la base de datos con Polars
 df = pl.read_database_uri(query=query, uri=uri)
 
-# Este método nos permite visualizar las victorias y empates por ligas
 def get_df_victory_draw_for_league(df):
+    """
+    Docstring para get_df_victory_draw_for_league
+
+    Este método nos permite visualizar las victorias y empates por ligas
+    
+    :param df: Descripción
+    """
     # Nos quedamos solo con los datos que nos interesan
     # que son los partidos jugados para hacer el porcentaje, las victorias, empates, y el nombre de la liga
     df_ve_liga = df.drop(["name", "goals_against", "goals_for", "points"])
@@ -66,9 +72,43 @@ def get_df_victory_draw_for_league(df):
     fig.show()
     return df_ve_liga
 
-# Este método nos permite visualizar cuales son los equipos más eficientes, 
-# comparando los goles de diferencias con los puntos que se consigue por partido
 def get_df_efficients_teams(df):
+    """
+    Docstring para get_df_efficients_teams
+    
+    Nos permite ver cuales son los equipos más eficientes, es decir,
+    cuantos puntos por partido consigue cada equipo comparandolo con sus goles de diferencia
+
+    :param df: DataFrame con los datos a tratar y graficar
+    """
+    df_efficient_equipos = df.drop(["wins", "draws"]) # Quitamos valores que no nos interesan como las victorias y los empates
+    df_efficient_equipos = df_efficient_equipos.with_columns([
+        (pl.col("goals_for") - pl.col("goals_against")).alias("goal_diff"), # Calculamos los goles de diferencia restadno los goles a fovr menos los goles en contra
+        ((pl.col("points") / pl.col("played")).alias("points_per_game")) # Calculamos los puntos por partido dividiendo los puntos por los partidos jugados
+    ])
+
+    # Una vez hecho los cálculos, los esribimos en un csv
+
+    df_efficient_equipos.write_csv("Equipos_Eficientes_GD_Puntos_Por_Partido.csv") 
+
+    # Luego lo pintamos en un scatter
+
+    fig = px.scatter(
+        df_efficient_equipos.to_pandas(),
+        x="goal_diff",
+        y="points_per_game",
+        color="name_league",
+        hover_name="name",
+        title="Goal Difference vs Points per Game",
+        trendline="ols" # Pintamos también la linea de tendencia de cada liga
+    )
+
+    # Podemos ver que la diferencia de goles y los puntos por partido tiene una correlación positiva, cuanto más diferencia de goles tengas, mayor puntos por partido obtienes
+
+    fig.show()
+    return df_efficient_equipos
+
+def get_df_efficients_teamsV2(df):
     # Ahora vamos a ver cuales son los equipos más eficientes, es decir,
     # cuantos puntos por partido consigue cada equipo comparandolo con sus goles de diferencia
     # habrá equipos que con poco gol de diferencia ganen más puntos que otros
@@ -99,9 +139,15 @@ def get_df_efficients_teams(df):
     fig.show()
     return df_efficient_equipos
 
-# Este método nos permite visualizar los goles a favor y en contra de cada equipo, 
-# clasificándolo por quien tiene buena/mala defensa buen/mal ataque comparándolo con la media
 def get_df_goals_against_goals_for_teams(df):
+    """
+    Docstring para get_df_goals_against_goals_for_teams
+    
+    Este método nos permite visualizar los goles a favor y en contra de cada equipo,
+    clasificándolo por quien tiene buena/mala defensa buen/mal ataque comparándolo con la media
+
+    :param df: DataFrame con los datos a tratar y graficar
+    """
     # Por otro lado, vamos a hacer una comparación de los goles a favor y en contra de cada equipo, para ver si un equipo es mejor atacando o defendiendo
     df_goals_against_goals_for_team = df.drop(["wins", "draws"])
 
@@ -179,8 +225,14 @@ def get_df_goals_against_goals_for_teams(df):
     fig.show()
     return df_goals_against_goals_for_team
 
-# Esta función nos permite ver los goles en contra por cada liga para poder analizar que liga es más defensiva y cuales menos
 def get_df_goals_against_leagues(df):
+    """
+    Docstring para get_df_goals_against_leagues
+    
+    Esta función nos permite ver los goles en contra por cada liga para poder analizar que liga es más defensiva y cuales menos
+
+    :param df: DataFrame con los datos a tratar y graficar
+    """
     # Ahora vamos a ver que ligas tiene menos promedio de goles en contra por partido, por lo que cogemos los datos que nos interese
     df_goals_against_liga = df.drop(["name", "wins", "draws", "points"])
 
@@ -211,6 +263,37 @@ def get_df_goals_against_leagues(df):
     fig.add_hline(y=global_avg, line_dash="dash", line_color="black")
     fig.show()
     return df_goals_against_liga
+
+def show_avg_league_goals(df):
+    """
+    Docstring para show_avg_league_goals
+
+    Método para mostrar gráficamente la media de los goles por partido por cada liga.
+    
+    :param df: DataFrame con los datos a tratar y graficar
+    """
+    df_goals_league = df.drop(["name", "wins", "goals_for", "points", "draws"])
+    avg_league_matches_goals = df_goals_league.group_by("name_league").mean()
+    avg_league_goals = avg_league_matches_goals.with_columns((pl.col("goals_against") / pl.col("played")).alias("avg_league_goals"))
+    fig = px.pie(avg_league_goals, values='avg_league_goals', names='name_league', title='Media de goles por liga')
+    fig.show()
+
+def show_avg_league_match_pts(df):
+    """
+    Docstring para show_avg_league_match_pts
+
+    Método para mostrar gráficamente la media de puntos que se consiguen por partido en cada liga.
+
+    :param df: DataFrame con los datos a tratar y graficar
+    """
+    df_pts_league = df.drop(["name", "wins", "goals_for", "draws", "goals_against"])
+    avg_league_pts = df_pts_league.group_by("name_league").mean()
+    avg_league_matches_pts = avg_league_pts.with_columns((pl.col("points") / pl.col("played")).alias("mean_league_pts_match"))
+    fig = px.pie(avg_league_matches_pts, values='mean_league_pts_match', names='name_league', title='Media de puntos por partido de cada liga')
+    fig.show()
+
+show_avg_league_goals(df)
+show_avg_league_match_pts(df)
 
 df_ve_liga = get_df_victory_draw_for_league(df)
 
