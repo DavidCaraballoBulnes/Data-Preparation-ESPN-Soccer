@@ -5,7 +5,9 @@ import matplotlib.pyplot as plt
 # Definimos las ligas que queremos consultar
 ligas_urls = {
     "LaLiga": "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
-    "Premier League": "https://site.web.api.espn.com/apis/v2/sports/soccer/eng.1/standings"
+    "Premier League": "https://site.web.api.espn.com/apis/v2/sports/soccer/eng.1/standings",
+    "Serie A": "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+    "Bundesliga": "https://site.web.api.espn.com/apis/v2/sports/soccer/ger.1/standings"
 }
 
 # Se indica las estadísticas que queremos guardar en la base de datos
