@@ -1,8 +1,10 @@
 import polars as pl
 import sys
+import os
 import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
+
 
 
 sys.stdout.reconfigure(encoding='utf-8')
@@ -16,6 +18,10 @@ query = "SELECT name, played, wins, draws, points, goals_against, goals_for, nam
 
 # Leer la base de datos con Polars
 df = pl.read_database_uri(query=query, uri=uri)
+
+# Crear directorio de almacenamiento de CSV si no existe
+DIRECTORIO_CSV = "data_output"
+os.makedirs(DIRECTORIO_CSV, exist_ok=True)
 
 def get_df_victory_draw_for_league(df):
     """
@@ -47,7 +53,7 @@ def get_df_victory_draw_for_league(df):
             (pl.col("draws") / pl.col("played")).alias("draw_rate") # Calculamos el draw-rate de la liga correspondiente
     ])
 
-    df_ve_liga.write_csv("Victorias_Empates_Por_Liga.csv") # Una vez calculado todo, lo escribimos en un csv
+    df_ve_liga.write_csv("data_output/Victorias_Empates_Por_Liga.csv") # Una vez calculado todo, lo escribimos en un csv
 
     labels = df_ve_liga["name_league"].to_list() # Obtenemos los labels de las diferentes ligas para ponerlo en los gráficos
     win_values = df_ve_liga["win_rate"].to_list() # Obtenemos los valores de las victorias
@@ -89,7 +95,7 @@ def get_df_efficients_teams(df):
 
     # Una vez hecho los cálculos, los esribimos en un csv
 
-    df_efficient_equipos.write_csv("Equipos_Eficientes_GD_Puntos_Por_Partido.csv") 
+    df_efficient_equipos.write_csv("data_output/Equipos_Eficientes_GD_Puntos_Por_Partido.csv") 
 
     # Luego lo pintamos en un scatter
 
@@ -125,7 +131,7 @@ def get_df_goals_against_goals_for_teams(df):
         (pl.col("goals_against")/pl.col("played")).alias("avg_goals_against") # Calculamos la media de goles en contra por partido
     ])
 
-    df_goals_against_goals_for_team.write_csv("Ataques_vs_Defensas_Por_Equipo.csv") # Lo guardamos en un csv
+    df_goals_against_goals_for_team.write_csv("data_output/Ataques_vs_Defensas_Por_Equipo.csv") # Lo guardamos en un csv
 
     fig = px.scatter(
         df_goals_against_goals_for_team.to_pandas(),  # Plotly trabaja mejor con pandas
@@ -214,7 +220,7 @@ def get_df_goals_against_leagues(df):
         ])
     )
 
-    df_goals_against_liga.write_csv("Ligas_Mas_Defensivas.csv") # Lo guardamos en un csv
+    df_goals_against_liga.write_csv("data_output/Ligas_Mas_Defensivas.csv") # Lo guardamos en un csv
 
     # Pintamos gráficos de barra para mostrar los resultados
     fig = px.bar(
