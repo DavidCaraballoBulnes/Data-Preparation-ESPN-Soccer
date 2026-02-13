@@ -73,7 +73,7 @@ Inserta o actualiza la información en la base de datos mediante funciones del m
   
   <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/9c68af12-fb67-4ce1-bd72-fcd6b74eae89" />
 
-  Podemos ver que en la Serie A es donde más empates hay, mientras que en la Bundesliga es donde menos empates hay. La Premier y LALIGA es un término medio, aunque la diferencia entre todas no es tan grande.
+  Podemos ver que en la Serie A es donde más empates hay, mientras que en la Bundesliga es donde menos empates tiene. La Premier y LALIGA es un término medio, aunque la diferencia entre todas no es tan grande.
   En cuanto a las victorias, la Bundesliga es donde más victorias hay (debido a que tienen menos empates), luego le sigue LALIGA.
   De esto podemos decir que la Bundesliga tiene más partidos decisivos (menos empates), donde los partidos son más ofensivos, mientras que la Serie A los equipos, es posible que jueguen con un bloque defensivo     mayor. La liga en el que podemos decir que hay un equilibrio entre el bloque defensivo y ofensivo es en la Premier, ya que su porcentaje de victorias y empates son muy parejos
 
@@ -131,6 +131,7 @@ python mainV2.py
 
 
 Proyecto desarrollado por Adrián García García, David Caraballo Bulnes.
+
 
 
 
