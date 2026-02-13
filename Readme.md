@@ -75,8 +75,14 @@ Inserta o actualiza la información en la base de datos mediante funciones del m
 
   Podemos ver que en la Serie A es donde más empates hay, mientras que en la Bundesliga es donde menos empates hay. La Premier y LALIGA es un término medio, aunque la diferencia entre todas no es tan grande
   En cuanto a las victorias, la Bundesliga es donde más victorias hay (debido a que tienen menos empates), luego le sigue LALIGA.
-  De esto podemos decir que la Bundesliga tiene más partidos decisivos (menos empates), donde los partidos son más ofensivos, mientras que la Serie A los equipos, es posible que jueguen con un bloque defensivo     mayor
+  De esto podemos decir que la Bundesliga tiene más partidos decisivos (menos empates), donde los partidos son más ofensivos, mientras que la Serie A los equipos, es posible que jueguen con un bloque defensivo     mayor. La liga en el que podemos decir que hay un equilibrio entre el bloque defensivo y ofensivo es en la Premier, ya que su porcentaje de victorias y empates son muy parejos
 
+- Luego, podemos ver una gráfica donde observamos la correlación entre los goles de diferencia y los puntos por partido de cada equipo de cuatro ligas distintas
+
+  <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/1cf59d8a-0e35-439e-853d-4c9429554ee5" />
+
+  En esta gráfica podemos ver que, cuanto mayor son los goles de diferencia, mayor son los puntos por partido, pero lo interesante de esta gráfica es mirar en ciertos sectores de la gráfica donde hay equipos que   tienen el mismo gol de diferencia pero hay algunos que tienen menos puntos por goles que otros. Un ejemplo que podemos ver en la gráfica es el Espanyol y el Elche, donde ambos tienen los mismos goles de          diferencia, pero el Espanyol tiene más puntos por partidos que el Elche, esto se pueden llamar casos "injustos", pero podemos deducir que el Elche haya perdido muchos partidos por un gol de diferencia y en       otros partidos haya metido muchos goles a favor, mientras que el Espanyol ha ganado muchos partidos por un gol de diferencia, y en otros pocos haya perdido por 2-3 goles en contra, de esta forma ambos tienen     los mismos goles de diferencia, pero el Espanyol más puntos por partidos
+  
 🧠 Tecnologías Utilizadas
 
 + Python 3
@@ -116,6 +122,7 @@ Esto creará (si no existe) la base de datos soccer.db y almacenará los datos o
 
 
 Proyecto desarrollado por Adrián García García, David Caraballo Bulnes, Pablo Baeza Gómez, Eva María García Gálvez.
+
 
 
 
