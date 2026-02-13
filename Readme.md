@@ -126,14 +126,12 @@ pip install requests matplotlib
 
 3. Ejecutar el script principal
 
-python main.py
-
-
-Esto creará (si no existe) la base de datos soccer.db y almacenará los datos obtenidos desde la API.
+python mainV2.py
 👥 Autores
 
 
-Proyecto desarrollado por Adrián García García, David Caraballo Bulnes, Pablo Baeza Gómez, Eva María García Gálvez.
+Proyecto desarrollado por Adrián García García, David Caraballo Bulnes.
+
 
 
 
