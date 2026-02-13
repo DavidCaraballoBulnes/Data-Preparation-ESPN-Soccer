@@ -83,7 +83,7 @@ Inserta o actualiza la información en la base de datos mediante funciones del m
 
   En esta gráfica podemos ver que, cuanto mayor son los goles de diferencia, mayor son los puntos por partido, pero lo interesante de esta gráfica es mirar en ciertos sectores de la gráfica donde hay equipos que   tienen el mismo gol de diferencia pero hay algunos que tienen menos puntos por goles que otros. Un ejemplo que podemos ver en la gráfica es el Espanyol y el Elche, donde ambos tienen los mismos goles de          diferencia, pero el Espanyol tiene más puntos por partidos que el Elche, esto se pueden llamar casos "injustos", pero podemos deducir que el Elche ha perdido muchos partidos por un gol de diferencia y en         otros partidos haya metido muchos goles a favor, mientras que el Espanyol ha ganado muchos partidos por un gol de diferencia, y en otros pocos haya perdido por 2-3 goles en contra, de esta forma ambos tienen     los mismos goles de diferencia, pero el Espanyol más puntos por partidos
 
-- Por otro lado, podemos ver una gráfica donde se compara los goles a favor y en contra de cada equipo
+- Por otro lado, podemos ver una <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/">gráfica donde se compara los goles a favor y en contra de cada equipo</a>
 
   <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/cfb11dff-49e3-4ff2-9971-81bb1c199123" />
 
@@ -127,6 +127,7 @@ Esto creará (si no existe) la base de datos soccer.db y almacenará los datos o
 
 
 Proyecto desarrollado por Adrián García García, David Caraballo Bulnes, Pablo Baeza Gómez, Eva María García Gálvez.
+
 
 
 
