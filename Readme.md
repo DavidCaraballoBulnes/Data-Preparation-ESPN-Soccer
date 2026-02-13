@@ -7,6 +7,8 @@ Actualmente, el sistema obtiene información actualizada sobre dos ligas de fút
 
 ✔ LaLiga (España)
 ✔ Premier League (Inglaterra)
+✔ Serie A (Italia)
+✔ Bundesliga (Alemania)
 
 Los datos se almacenan en una base de datos SQLite para su posterior análisis y visualización.
 
@@ -18,7 +20,7 @@ El proyecto consta de un proceso automatizado que:
 
 - Los almacena en una base de datos estructurada (soccer.db) para su posterior análisis.
 
-- Genera gráficas comparativas de goles a favor y en contra por liga (funcionalidad extra).
+- Generar distintos gráficos que comentaremos posteriormente para hacer un análisis de ello y sacar conclusiones.
 
 🎯 Objetivos del Proyecto
 
@@ -26,9 +28,7 @@ El proyecto consta de un proceso automatizado que:
 
 ▪ Diseñar una estructura de base de datos relacional para almacenar la información.
 
-▪ Implementar funciones de inserción y actualización de datos en SQLite.
-
-▪ Trabajar de forma colaborativa con control de versiones mediante GitHub.
+▪ Realizar gráficos y hacer un análisis donde sacemos conclusiones claras.
 
 🧩 Estructura del Proyecto
 
@@ -53,52 +53,17 @@ Posteriormente:
 
 Extrae estadísticas relevantes (partidos jugados, victorias, derrotas, puntos, etc.).
 
-Estructura los datos en un diccionario.
-
 Inserta o actualiza la información en la base de datos mediante funciones del módulo db.py.
 
-Genera gráficas separadas para cada liga mostrando goles a favor y en contra por equipo.
-
 2. Gestión de la base de datos (db.py)
+   
+3. Una vez guardada la información en la base de datos, en otro script hacemos una consulta SQL para obtener los datos necesarios que utilizaremos para crear gráficas y hacer análisis
 
-El módulo db.py se encarga de:
+4. Con la función 'read_database_uri' incluimos la consulta y el url de nuestra base de datos SQLITE, de esta froma, obtendremos un dataframe de Polars con la información importante, haciedno asi una limpieza rápida y efectiva
 
-Crear las tablas (league, teams, stats).
+5. Luego, una vez tenemos el dataframe general, por cada gráfico que hagamos hacemos un '.drop' para reducir más el número de variables, ya que para hcer una gráfica u otra, necesitamos un número determinado de variables, por lo que vamos creando dataframes que nos servirá para realizar un análisis u otro
 
-Insertar nuevas ligas y equipos.
-
-Actualizar estadísticas de los equipos.
-
-Evitar duplicación de registros mediante verificaciones previas.
-
-Las tablas tienen las siguientes estructuras:
-
-==========================
-      Tabla: league
-==========================
-| id |   name   |  year  |
-|----|----------|--------|
-|  1 |  LaLiga  |  2024  |
-==========================
-
-
-=================================================================
-						Tabla: teams
-=================================================================
-|	id	|		name		|		logo		| 	league_id	|
-|-------|-------------------|-------------------|---------------|
-|	1	|	Real Madrid	    |  	 https://...	|	    1		|
-=================================================================
-
-
-==================================================================================================
-        								Tabla: stats
-==================================================================================================
-| id | team_id  | points | played | goals_against | goals_for | wins | draws | losses | position |
-|----|----------|--------|--------|---------------|-----------|------|-------|--------|----------|
-|  1 |    1     |   85   |   38   |       30      |     70    |  27  |   4   |    7   |     1    |
-==================================================================================================
-
+6. Una vez tengamos el dataframe en cuestión, creamos la gráfica correspondiete para hacer el análisis 
 
 🧠 Tecnologías Utilizadas
 
@@ -113,7 +78,10 @@ Las tablas tienen las siguientes estructuras:
 + Matplotlib (para generar gráficas)
 
 + GitHub (para control de versiones y trabajo colaborativo)
-
+  
++ Polars (nos permite guardar la información en DataFrames y generar gráficos)
+  
++ Plotly (generar gráficas interactivas)
 
 🚀 Ejecución del Proyecto
 
@@ -132,29 +100,8 @@ python main.py
 
 
 Esto creará (si no existe) la base de datos soccer.db y almacenará los datos obtenidos desde la API.
-
-
-📊 Funcionalidades Extra
-
-- Generación de gráficas por liga (goles a favor y en contra).
-
-- Soporte para múltiples ligas (actualmente LaLiga y Premier League).
-
-
-📈 Posibles Ampliaciones
-
-+ Agregar más fuentes de datos:
-
-	- Otras ligas (liga alemana, argentina, etc.)
-
-+ Automatizar la actualización periódica mediante tareas programadas.
-
-+ Ampliar el modelo de datos para incluir jugadores y estadísticas individuales.
-
-+ Permitir el histórico de datos para mantener los datos de años y temporadas anteriores.
-
-
 👥 Autores
 
 
 Proyecto desarrollado por Adrián García García, David Caraballo Bulnes, Pablo Baeza Gómez, Eva María García Gálvez.
+
