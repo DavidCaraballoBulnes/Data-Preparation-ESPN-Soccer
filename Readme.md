@@ -77,7 +77,7 @@ Inserta o actualiza la información en la base de datos mediante funciones del m
   En cuanto a las victorias, la Bundesliga es donde más victorias hay (debido a que tienen menos empates), luego le sigue LALIGA.
   De esto podemos decir que la Bundesliga tiene más partidos decisivos (menos empates), donde los partidos son más ofensivos, mientras que la Serie A los equipos, es posible que jueguen con un bloque defensivo     mayor. La liga en el que podemos decir que hay un equilibrio entre el bloque defensivo y ofensivo es en la Premier, ya que su porcentaje de victorias y empates son muy parejos
 
-- Luego, podemos ver una gráfica donde observamos la correlación entre los goles de diferencia y los puntos por partido de cada equipo de cuatro ligas distintas
+- Luego, podemos ver una <a href="https://4drian04.github.io/Obtencion-Almacenamiento-Datos/">gráfica donde observamos la correlación entre los goles de diferencia y los puntos por partido de cada equipo de        cuatro ligas distintas</a>
 
   <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/1cf59d8a-0e35-439e-853d-4c9429554ee5" />
 
@@ -131,6 +131,7 @@ python mainV2.py
 
 
 Proyecto desarrollado por Adrián García García, David Caraballo Bulnes.
+
 
 
 
