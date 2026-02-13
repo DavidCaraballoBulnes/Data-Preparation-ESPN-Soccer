@@ -65,7 +65,17 @@ Inserta o actualiza la información en la base de datos mediante funciones del m
 
 5. Luego, una vez tenemos el dataframe general, por cada gráfico que hagamos hacemos un '.drop' para reducir más el número de variables, ya que para hcer una gráfica u otra, necesitamos un número determinado de variables, por lo que vamos creando dataframes que nos servirá para realizar un análisis u otro
 
-6. Una vez tengamos el dataframe en cuestión, creamos la gráfica correspondiete para hacer el análisis 
+6. Una vez tengamos el dataframe en cuestión, creamos la gráfica correspondiete para hacer el análisis
+
+📊 Gráficas y análisis
+
+- En primer lugar, vemos una gráfica donde podemos ver las victorias y los empates de cada liga
+  
+  <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/9c68af12-fb67-4ce1-bd72-fcd6b74eae89" />
+
+  Podemos ver que en la Serie A es donde más empates hay, mientras que en la Bundesliga es donde menos empates hay. La Premier y LALIGA es un término medio, aunque la diferencia entre todas no es tan grande
+  En cuanto a las victorias, la Bundesliga es donde más victorias hay (debido a que tienen menos empates), luego le sigue LALIGA.
+  De esto podemos decir que la Bundesliga tiene más partidos decisivos (menos empates), donde los partidos son más ofensivos, mientras que la Serie A los equipos, es posible que jueguen con un bloque defensivo     mayor
 
 🧠 Tecnologías Utilizadas
 
@@ -106,5 +116,6 @@ Esto creará (si no existe) la base de datos soccer.db y almacenará los datos o
 
 
 Proyecto desarrollado por Adrián García García, David Caraballo Bulnes, Pablo Baeza Gómez, Eva María García Gálvez.
+
 
 
