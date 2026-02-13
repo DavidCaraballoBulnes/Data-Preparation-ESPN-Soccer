@@ -46,7 +46,9 @@ El script realiza una solicitud HTTP a la API de ESPN para obtener información 
 
 ligas_urls = {
     "LaLiga": "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
-    "Premier League": "https://site.web.api.espn.com/apis/v2/sports/soccer/eng.1/standings"
+    "Premier League": "https://site.web.api.espn.com/apis/v2/sports/soccer/eng.1/standings",
+    "Serie A": "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+    "Bundesliga": "https://site.web.api.espn.com/apis/v2/sports/soccer/ger.1/standings"
 }
 
 Posteriormente:
@@ -104,4 +106,5 @@ Esto creará (si no existe) la base de datos soccer.db y almacenará los datos o
 
 
 Proyecto desarrollado por Adrián García García, David Caraballo Bulnes, Pablo Baeza Gómez, Eva María García Gálvez.
+
 
