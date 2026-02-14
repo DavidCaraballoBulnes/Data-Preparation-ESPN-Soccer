@@ -274,6 +274,123 @@ def show_avg_league_match_pts(df):
     fig.show()
     return avg_league_matches_pts
 
+df_avg_league_goals = show_avg_league_goals(df)
+
+df_avg_league_match_pts = show_avg_league_match_pts(df)
+
+df_ve_ligue = get_df_victory_draw_for_league(df)
+
+df_efficient_teams = get_df_efficients_teams(df)
+
+df_goals_against_goals_for_teams = get_df_goals_against_goals_for_teams(df)
+
+df_goals_against_leagues = get_df_goals_against_leagues(df)
+
+
+# Gráficos de jugadores
+
+wings_players = ["Antony", "Vinícius Júnior", "Lamine Yamal", "Raphinha", "Nico Williams", "Marcus Rashford", "Mohamed Salah", "Rafael Leão", "Jérémy Doku", "Alejandro Garnacho", "Arnaut Danjuma"]
+# Convertimos la lista en string SQL
+players_sql_wingers = ", ".join([f"'{player}'" for player in wings_players])
+
+query = f"""
+SELECT 
+    fp.name,
+    fp.games_played,
+    fp.goals,
+    fp.assists,
+    fp.fouls_received,
+    t.name AS team_name,
+    l.name_league
+FROM field_players fp
+INNER JOIN teams t ON fp.team_id = t.id
+INNER JOIN league l ON fp.league_id = l.id_league
+WHERE fp.name IN ({players_sql_wingers})
+"""
+
+df_players_wingers = pl.read_database_uri(query=query, uri=uri)
+
+query = f"""
+SELECT 
+    -- Columnas de la tabla field_players (Jugadores)
+    fp.id AS player_id,
+    fp.name AS player_name,
+    fp.dorsal,
+    fp.position,
+    fp.age,
+    fp.nationality,
+    fp.height,
+    fp.weight,
+    fp.games_played,
+    fp.starts,
+    fp.subs,
+    fp.goals,
+    fp.assists,
+    fp.shots_on_target,
+    fp.fouls_committed,
+    fp.fouls_received,
+    fp.yellow_cards,
+    fp.red_cards,
+    fp.team_id AS player_team_id,
+    fp.league_id AS player_league_id,
+
+    -- Columnas de la tabla teams (Equipos)
+    t.id AS team_id,
+    t.name AS team_name,
+    t.logo AS team_logo,
+    t.league_id AS team_league_id,
+
+    -- Columnas de la tabla league (Ligas)
+    l.id_league,
+    l.name_league,
+    CAST(l.year AS TEXT) AS league_year
+    
+FROM field_players fp
+INNER JOIN teams t ON fp.team_id = t.id
+INNER JOIN league l ON fp.league_id = l.id_league
+"""
+
+df_players = pl.read_database_uri(query=query, uri=uri)
+
+query_porteros = f"""
+SELECT 
+    -- Columnas de la tabla goalkeepers (Porteros)
+    gk.id AS player_id,
+    gk.name AS player_name,
+    gk.dorsal,
+    gk.position,
+    gk.age,
+    gk.nationality,
+    gk.height,
+    gk.weight,
+    gk.games_played,
+    gk.saves,              -- Atajadas (específico de porteros)
+    gk.goals_conceded,     -- Goles encajados (específico de porteros)
+    gk.fouls_committed,
+    gk.fouls_received,
+    gk.yellow_cards,
+    gk.red_cards,
+    gk.team_id AS player_team_id,
+    gk.league_id AS player_league_id,
+
+    -- Columnas de la tabla teams (Equipos)
+    t.id AS team_id,
+    t.name AS team_name,
+    t.logo AS team_logo,
+    t.league_id AS team_league_id,
+
+    -- Columnas de la tabla league (Ligas)
+    l.id_league,
+    l.name_league,
+    CAST(l.year AS TEXT) AS league_year
+    
+FROM goalkeepers gk
+INNER JOIN teams t ON gk.team_id = t.id
+INNER JOIN league l ON gk.league_id = l.id_league
+"""
+
+df_goalkeepers = pl.read_database_uri(query=query_porteros, uri=uri)
+
 def get_goals_assist_wingers(df):
     df_wingers = df.drop(["team_name", "games_played"])
     df_wingers = (
@@ -364,123 +481,6 @@ def get_fouls_received_per_game(df):
     fig.show()
     return df_fouls_per_game
 
-df_avg_league_goals = show_avg_league_goals(df)
-
-df_avg_league_match_pts = show_avg_league_match_pts(df)
-
-df_ve_ligue = get_df_victory_draw_for_league(df)
-
-df_efficient_teams = get_df_efficients_teams(df)
-
-df_goals_against_goals_for_teams = get_df_goals_against_goals_for_teams(df)
-
-df_goals_against_leagues = get_df_goals_against_leagues(df)
-
-
-# Gráficos de jugadores
-
-wings_players = ["Antony", "Vinícius Júnior", "Lamine Yamal", "Raphinha", "Nico Williams", "Marcus Rashford", "Mohamed Salah", "Rafael Leão", "Jérémy Doku", "Alejandro Garnacho", "Arnaut Danjuma"]
-# Convertimos la lista en string SQL
-players_sql_wingers = ", ".join([f"'{player}'" for player in wings_players])
-
-query = f"""
-SELECT 
-    fp.name,
-    fp.games_played,
-    fp.goals,
-    fp.assists,
-    fp.fouls_received,
-    t.name AS team_name,
-    l.name_league
-FROM field_players fp
-INNER JOIN teams t ON fp.team_id = t.id
-INNER JOIN league l ON fp.league_id = l.id_league
-WHERE fp.name IN ({players_sql_wingers})
-"""
-
-df_players = pl.read_database_uri(query=query, uri=uri)
-
-query = f"""
-SELECT 
-    -- Columnas de la tabla field_players (Jugadores)
-    fp.id AS player_id,
-    fp.name AS player_name,
-    fp.dorsal,
-    fp.position,
-    fp.age,
-    fp.nationality,
-    fp.height,
-    fp.weight,
-    fp.games_played,
-    fp.starts,
-    fp.subs,
-    fp.goals,
-    fp.assists,
-    fp.shots_on_target,
-    fp.fouls_committed,
-    fp.fouls_received,
-    fp.yellow_cards,
-    fp.red_cards,
-    fp.team_id AS player_team_id,
-    fp.league_id AS player_league_id,
-
-    -- Columnas de la tabla teams (Equipos)
-    t.id AS team_id,
-    t.name AS team_name,
-    t.logo AS team_logo,
-    t.league_id AS team_league_id,
-
-    -- Columnas de la tabla league (Ligas)
-    l.id_league,
-    l.name_league,
-    CAST(l.year AS TEXT) AS league_year
-    
-FROM field_players fp
-INNER JOIN teams t ON fp.team_id = t.id
-INNER JOIN league l ON fp.league_id = l.id_league
-"""
-
-df_players = pl.read_database_uri(query=query, uri=uri)
-
-query_porteros = f"""
-SELECT 
-    -- Columnas de la tabla goalkeepers (Porteros)
-    gk.id AS player_id,
-    gk.name AS player_name,
-    gk.dorsal,
-    gk.position,
-    gk.age,
-    gk.nationality,
-    gk.height,
-    gk.weight,
-    gk.games_played,
-    gk.saves,              -- Atajadas (específico de porteros)
-    gk.goals_conceded,     -- Goles encajados (específico de porteros)
-    gk.fouls_committed,
-    gk.fouls_received,
-    gk.yellow_cards,
-    gk.red_cards,
-    gk.team_id AS player_team_id,
-    gk.league_id AS player_league_id,
-
-    -- Columnas de la tabla teams (Equipos)
-    t.id AS team_id,
-    t.name AS team_name,
-    t.logo AS team_logo,
-    t.league_id AS team_league_id,
-
-    -- Columnas de la tabla league (Ligas)
-    l.id_league,
-    l.name_league,
-    CAST(l.year AS TEXT) AS league_year
-    
-FROM goalkeepers gk
-INNER JOIN teams t ON gk.team_id = t.id
-INNER JOIN league l ON gk.league_id = l.id_league
-"""
-
-df_goalkeepers = pl.read_database_uri(query=query_porteros, uri=uri)
-
 def show_avg_team_ages(df_players, df_goalkeepers):
     """
     Calcula y grafica la edad media de cada equipo utilizando un gráfico 
@@ -516,6 +516,8 @@ def show_avg_team_ages(df_players, df_goalkeepers):
     # Ordenar los datos de menor a mayor es crucial en un Dot Plot para crear 
     # un efecto de "escalera" visual y facilitar el ranking de equipos.
     df_avg_team_ages = df_avg_team_ages.sort("avg_age", descending=False)
+
+    df_avg_team_ages.write_csv("data_output/Media_Edades_Equipos.csv")
 
     # 5. CREACIÓN DEL GRÁFICO (SCATTER / DOT PLOT)
     fig = px.scatter(
@@ -605,6 +607,8 @@ def show_total_goals_by_nationality_map(df_players):
         .sort("total_goals", descending=True)
     )
 
+    df_total_country_goals.write_csv("data_output/Total_Goles_Nacionalidad.csv")
+
     # =========================================================================
     # 🌍 MAPEO DE PAÍSES PARA PLOTLY (De Español a Código ISO Alpha-3)
     # =========================================================================
@@ -668,9 +672,9 @@ def show_total_goals_by_nationality_map(df_players):
     return df_total_country_goals
 
 
-df_wingers = get_goals_assist_wingers(df_players)
+df_wingers = get_goals_assist_wingers(df_players_wingers)
 
-df_fouls_wingers_per_game = get_fouls_received_per_game(df_players)
+df_fouls_wingers_per_game = get_fouls_received_per_game(df_players_wingers)
 
 df_avg_team_ages = show_avg_team_ages(df_players, df_goalkeepers)
 
