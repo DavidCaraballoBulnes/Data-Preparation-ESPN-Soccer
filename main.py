@@ -268,6 +268,96 @@ def show_avg_league_match_pts(df):
     fig.show()
     return avg_league_matches_pts
 
+def get_goals_assist_wingers(df):
+    df_wingers = df.drop(["team_name", "games_played"])
+    df_wingers = (
+    df_wingers.with_columns(
+        (pl.col("goals") + pl.col("assists")).alias("total_contribution")
+    )
+    .sort("total_contribution", descending=True)
+    )
+
+    df_pd = df_wingers.to_pandas()
+
+    fig = make_subplots(
+        rows=1, cols=2,
+        subplot_titles=("Goles + Asistencias", "Goles vs Asistencias"),
+        horizontal_spacing=0.15
+    )
+
+    # Barras apiladas
+    fig.add_trace(
+        go.Bar(
+            x=df_pd["name"],
+            y=df_pd["goals"],
+            name="Goles"
+        ),
+        row=1, col=1
+    )
+
+    fig.add_trace(
+        go.Bar(
+            x=df_pd["name"],
+            y=df_pd["assists"],
+            name="Asistencias"
+        ),
+        row=1, col=1
+    )
+
+    # Scatter plot
+    fig.add_trace(
+        go.Scatter(
+            x=df_pd["goals"],
+            y=df_pd["assists"],
+            mode="markers+text",
+            text=df_pd["name"],
+            textposition="top center",
+            name="Jugador",
+            marker=dict(
+                size=df_pd["total_contribution"] * 2  # tamaño según contribución
+            ),
+            hovertemplate=(
+                "<b>%{text}</b><br>" +
+                "Goles: %{x}<br>" +
+                "Asistencias: %{y}<br>"
+            )
+        ),
+        row=1, col=2
+    )
+
+    fig.update_layout(
+        barmode="stack",
+        title="Comparación de Extremos - Goles y Asistencias",
+    )
+
+    fig.update_xaxes(title_text="Jugador", row=1, col=1)
+    fig.update_yaxes(title_text="Cantidad", row=1, col=1)
+
+    fig.update_xaxes(title_text="Goles", row=1, col=2)
+    fig.update_yaxes(title_text="Asistencias", row=1, col=2)
+
+    fig.show()
+    return df_wingers
+
+def get_fouls_received_per_game(df):
+    df_fouls_per_game = df.drop(["team_name", "name_league", "goals", "assists"])
+    df_fouls_per_game = df.with_columns(
+    (pl.col("fouls_received") / pl.col("games_played")).alias("fouls_per_game")
+    )
+
+    # Pintamos gráficos de barra para mostrar los resultados
+    fig = px.bar(
+        df_fouls_per_game.to_pandas(),
+        x="name",
+        y="fouls_per_game",
+        color="name",
+        color_continuous_scale="Reds",
+        title="Faltas cometidas a los extremos por partido"
+    )
+
+    fig.show()
+    return df_fouls_per_game
+
 show_avg_league_goals(df)
 show_avg_league_match_pts(df)
 
@@ -278,3 +368,31 @@ df_efficient_teams = get_df_efficients_teams(df)
 df_goals_against_goals_for_teams = get_df_goals_against_goals_for_teams(df)
 
 df_goals_against_leagues = get_df_goals_against_leagues(df)
+
+
+# Gráficos de jugadores
+
+wings_players = ["Antony", "Vinícius Júnior", "Lamine Yamal", "Raphinha", "Nico Williams", "Marcus Rashford", "Mohamed Salah", "Rafael Leão", "Jérémy Doku", "Alejandro Garnacho", "Arnaut Danjuma"]
+# Convertimos la lista en string SQL
+players_sql = ", ".join([f"'{player}'" for player in wings_players])
+
+query = f"""
+SELECT 
+    fp.name,
+    fp.games_played,
+    fp.goals,
+    fp.assists,
+    fp.fouls_received,
+    t.name AS team_name,
+    l.name_league
+FROM field_players fp
+INNER JOIN teams t ON fp.team_id = t.id
+INNER JOIN league l ON fp.league_id = l.id_league
+WHERE fp.name IN ({players_sql})
+"""
+
+df_players = pl.read_database_uri(query=query, uri=uri)
+
+df_wingers = get_goals_assist_wingers(df_players)
+
+df_fouls_wingers_per_game = get_fouls_received_per_game(df_players)
