@@ -138,11 +138,13 @@ pip install requests matplotlib
 
 3. Ejecutar el script principal
 
-python mainV2.py
+   python main.py
+   
 👥 Autores
 
 
 Proyecto desarrollado por Adrián García García, David Caraballo Bulnes.
+
 
 
 
