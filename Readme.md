@@ -105,7 +105,7 @@ Inserta o actualiza la información en la base de datos mediante funciones del m
 
   <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/5fbe9d89-6e90-425d-bb3c-43a958fe56bc" />
 
-  Siendo extremo, los goles no son lo más importante, eso es trabajo del delantero centro, lo más importante siendo extremo son las asistencias y las faltas recibidas por partido, ya que eso quiere decir que el    extremo encara mucho, quizas sea un jugador rápido o rápido en conducción, por lo que es díficil de parar, a no ser que sea con faltas, de esta forma, se genera una ventaja al equipo que recibe la falta. En      este caso vemos que, don Vinicius Junior es el que más faltas recibe de todos los extremos analizados, siguiendole Lamine Yamal
+  Siendo extremo, los goles no son lo más importante, eso es trabajo del delantero centro, lo más importante jugando en esa posición son las asistencias y las faltas recibidas por partido, ya que eso quiere        decir que el extremo encara mucho, quizas sea un jugador rápido o rápido en conducción, por lo que es díficil de parar, a no ser que sea con faltas, de esta forma, se genera una ventaja al equipo que recibe la   falta. En este caso vemos que, don Vinicius Junior es el que más faltas recibe de todos los extremos analizados, siguiendole Lamine Yamal
   
 🧠 Tecnologías Utilizadas
 
@@ -143,6 +143,7 @@ python mainV2.py
 
 
 Proyecto desarrollado por Adrián García García, David Caraballo Bulnes.
+
 
 
 
