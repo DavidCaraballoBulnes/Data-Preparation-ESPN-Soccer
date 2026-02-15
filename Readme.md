@@ -69,7 +69,19 @@ Inserta o actualiza la información en la base de datos mediante funciones del m
 
 📊 Gráficas y análisis
 
-- En primer lugar, vemos una gráfica donde podemos ver las victorias y los empates de cada liga
+- En primer lugar, tenemos un gráfico que representa la <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Media_Goles_Partido_Ligas.html">media de goles por partido en cada liga</a>
+
+  <img width="1520" height="781" alt="newplot" src="" />
+
+  Podemos ver que la liga en la que se marcan más goles es la Bundeliga (la liga alemana) y la liga en que menos goles se marcan es la Serie A (la liga italiana). Esto puede indicar que en la liga alemana hay mejores delanteros o que en la liga italiana hay mejores defensas y porteros.
+
+- Parecido al gráfico anterior, tenemos la <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Media_Puntos_Partidos_Ligas.html">media de puntos por partido en cada liga</a>
+
+  <img width="1520" height="781" alt="newplot" src="" />
+
+  Concluimos que está muy reñida la cosa en cuestión de puntos. En todas las ligas se suelen sacar en torno a 1,4 puntos por partido, esto indica que se empata más de lo que se gana.
+
+- A continuación, vemos una <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Victorias_Empates_Por_Liga.html">gráfica donde podemos ver las victorias y los empates de cada liga</a>
   
   <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/9c68af12-fb67-4ce1-bd72-fcd6b74eae89" />
 
@@ -77,36 +89,48 @@ Inserta o actualiza la información en la base de datos mediante funciones del m
   En cuanto a las victorias, la Bundesliga es donde más victorias hay (debido a que tienen menos empates), luego le sigue LALIGA.
   De esto podemos decir que la Bundesliga tiene más partidos decisivos (menos empates), donde los partidos son más ofensivos, mientras que la Serie A los equipos, es posible que jueguen con un bloque defensivo     mayor. La liga en el que podemos decir que hay un equilibrio entre el bloque defensivo y ofensivo es en la Premier, ya que su porcentaje de victorias y empates son muy parejos
 
-- Luego, podemos ver una <a href="https://4drian04.github.io/Obtencion-Almacenamiento-Datos/">gráfica donde observamos la correlación entre los goles de diferencia y los puntos por partido de cada equipo de        cuatro ligas distintas</a>
+- Luego, podemos ver una <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Equipos_Eficientes_GD_Puntos_Por_Partido.html">gráfica donde observamos la correlación entre los goles de diferencia y los puntos por partido de cada equipo de        cuatro ligas distintas</a>
 
   <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/1cf59d8a-0e35-439e-853d-4c9429554ee5" />
 
   En esta gráfica podemos ver que, cuanto mayor son los goles de diferencia, mayor son los puntos por partido, pero lo interesante de esta gráfica es mirar en ciertos sectores de la gráfica donde hay equipos que   tienen el mismo gol de diferencia pero hay algunos que tienen menos puntos por goles que otros. Un ejemplo que podemos ver en la gráfica es el Espanyol y el Elche, donde ambos tienen los mismos goles de          diferencia, pero el Espanyol tiene más puntos por partidos que el Elche, esto se pueden llamar casos "injustos", pero podemos deducir que existe la posibilidad de que el Elche ha perdido muchos partidos por un   gol de diferencia y en otros partidos ha metido muchos goles a favor, mientras que el Espanyol ha ganado muchos partidos por un gol de diferencia, y en otros pocos haya perdido por 2-3 goles en contra, de esta   forma ambos tienen los mismos goles de diferencia, pero el Espanyol más puntos por partidos
 
-- Por otro lado, podemos ver una <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/">gráfica donde se compara los goles a favor y en contra de cada equipo</a>
+- Por otro lado, podemos ver una <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Ataques_vs_Defensas_Por_Equipo.html">gráfica donde se compara los goles a favor y en contra de cada equipo</a>
 
   <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/cfb11dff-49e3-4ff2-9971-81bb1c199123" />
 
   La gráfica esta dividida en diferentes secciones, para ello he obtenido la media de los goles a favor y en contra y con esas medias he añadidos las líneas que separan en diferentes sectores. Podemos visualizar   los equipos que tienen mala/buena defensa y mal/buen ataque. Viendo las diferentes secciones, podemos ver que la liga que tiene mejores ataques es la Premier, donde diez equipos se encuentran en la parte de la   derecha (donde se encuentran los equipos con mejores ataques), luego le sigue la Bundesliga con 9 equipos, mientras que el equipo que tienen menos equipos en la sección de buenos ataques es la Serie A. Por       otro lado, las ligas con mejores defensas es LALIGA y la Serie A con 11 equipos en la parte inferior donde se encuentran los equipos con mejores defensas. La liga que peor defensa tiene según la gráfica es la    Bundesliga, donde tiene solo 7 equipos con buenos defensas, y 4 de ellos se encuentran muy cerca de la frontera, por lo que si la media cambia, podrían cambiar de sección
 
-- Por otra parte, podemos observar esta gráfica, que nos muestra el promedio de goles en contra por liga
+- Por otra parte, podemos observar esta gráfica, que nos muestra el <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Ligas_Mas_Defensivas.html">promedio de goles en contra por liga</a>
 
   <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/fe498ef7-3727-459d-a6a5-c00011f6ba09" />
 
   Podemos observar que, donde más goles encajados hay es en la Bundesliga, superando por mucho el promedio total de los goles encajados de las 4 ligas estudiadas. Esto nos hace ver que lo analizado anteriormente   (Bundesliga peores defensas y menos empates) tenga sentido, ya que tiene más goles encajados. Por otro lado, la liga que menos goles encajados tiene es la Serie A, que relacionado con gráficas anteriores         podemos concluir que tiene sentido, ya que es la liga que más empates hay y menos equipos tienen buen ataque. En cuanto a LALIGA y la Premier League, podemos ver que siguen un equilibro, aunque la Premier        supera por poco la media global de goles encajados
 
-- Luego pasamos a los datos de los jugadores, en este caso vemos los goles y asistencias de los mejores extremos del mundo
+- Luego pasamos a los datos de los jugadores, en este caso vemos los <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Goles_Asistencias_Extremos.html">goles y asistencias de los mejores extremos del mundo</a>
 
   <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/01265a48-8a76-4d41-8551-485051450405" />
 
   Vemos en un gráfico apilado tanto los goles, como las asistencias de los extremos del mundo, donde en primer lugar está Lamine Yamal, luego le sigue don Vinicius Junior y en tercer lugar Raphinha. A la derecha   podemos observar un gráfico Scatter, pero con los mismos datos, en el que cuanto más alto estes más asistencias tiene, y cuanto más a la derecha en el eje X más goles
 
-- Además, otro gráfico interesante que mirar acerca de los extremos son las faltas recibidas por partidos
+- Además, otro gráfico interesante que mirar acerca de los extremos son las <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Faltas_Recibidas_Extremos.html">faltas recibidas por partidos</a>
 
   <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/5fbe9d89-6e90-425d-bb3c-43a958fe56bc" />
 
-  Siendo extremo, los goles no son lo más importante, eso es trabajo del delantero centro, lo más importante jugando en esa posición son las asistencias y las faltas recibidas por partido, ya que eso quiere        decir que el extremo encara mucho, quizas sea un jugador rápido o rápido en conducción, por lo que es díficil de parar, a no ser que sea con faltas, de esta forma, se genera una ventaja al equipo que recibe la   falta. En este caso vemos que, don Vinicius Junior es el que más faltas recibe de todos los extremos analizados, siguiendole Lamine Yamal
+  Siendo extremo, los goles no son lo más importante, eso es trabajo del delantero centro, lo más importante jugando en esa posición son las asistencias y las faltas recibidas por partido, ya que eso quiere        decir que el extremo encara mucho, quizas sea un jugador rápido o rápido en conducción, por lo que es díficil de parar, a no ser que sea con faltas, de esta forma, se genera una ventaja al equipo que recibe la   falta. En este caso vemos que, don Vinicius Junior es el que más faltas recibe de todos los extremos analizados, siguiendole Lamine Yamal.
   
+  -  Ahora, vamos a ver un gráfico comparando la <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Media_Edades_Equipos.html">edad media de la plantilla de cada equipo</a>
+
+  <img width="1520" height="781" alt="newplot" src="" />
+
+  Podemos ver que el Chelsea tiene una media de edad de aproximadamente 22 años. Eso indica que dicho equipo tendrá asegurada la plantilla durante mínimo una década. Por otro lado, tenemos equipos como el Rayo Vallecano y el SC Freiburg, cuya media es de 27 años aproximadamente. Éstos deberán renovar la plantilla de manera más inmediata. 
+
+  -  Por último, tenemos un mapa geográfico representando los <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Total_Goles_Nacionalidad.html">goles que han marcado los jugadores según su nacionalidad</a>
+
+  <img width="1520" height="781" alt="newplot" src="" />
+
+  De este gráfico podemos observar que el país ganador es España con una clara diferencia, superando los 300 goles. Esto se debe, en su mayor parte, a la cantidad de jugadores de cada nacionalidad, teniendo éste  más de 400. También, destacan países como Alemania, Inglaterra y Francia, que, pese a tener la mitad de jugadores, han estado cerca. Mientras que España tiene 100 goles menos que jugadores activos, Francia y Alemania están en el caso contrario, demostrando que la calidad es mejor que la cantidad.
+
 🧠 Tecnologías Utilizadas
 
 + Python 3
