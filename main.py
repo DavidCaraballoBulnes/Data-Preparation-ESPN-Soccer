@@ -22,6 +22,10 @@ df = pl.read_database_uri(query=query, uri=uri)
 DIRECTORIO_CSV = "data_output"
 os.makedirs(DIRECTORIO_CSV, exist_ok=True)
 
+# Crear directorio de almacenamiento de gráficos si no existe
+DIRECTORIO_GRAFICOS = "graficos"
+os.makedirs(DIRECTORIO_GRAFICOS, exist_ok=True)
+
 def get_df_victory_draw_for_league(df):
     """
     Docstring para get_df_victory_draw_for_league
@@ -52,7 +56,7 @@ def get_df_victory_draw_for_league(df):
             (pl.col("draws") / pl.col("played")).alias("draw_rate") # Calculamos el draw-rate de la liga correspondiente
     ])
 
-    df_ve_liga.write_csv("data_output/Victorias_Empates_Por_Liga.csv") # Una vez calculado todo, lo escribimos en un csv
+    df_ve_liga.write_csv(DIRECTORIO_CSV+"/Victorias_Empates_Por_Liga.csv") # Una vez calculado todo, lo escribimos en un csv
 
     labels = df_ve_liga["name_league"].to_list() # Obtenemos los labels de las diferentes ligas para ponerlo en los gráficos
     win_values = df_ve_liga["win_rate"].to_list() # Obtenemos los valores de las victorias
@@ -74,6 +78,8 @@ def get_df_victory_draw_for_league(df):
                         font_size=20, showarrow=False, xanchor="center"),
                     dict(text='Draws', x=sum(fig.get_subplot(1, 2).x) / 2, y=0.5,
                         font_size=20, showarrow=False, xanchor="center")])
+    
+    fig.write_html(DIRECTORIO_GRAFICOS+"/Victorias_Empates_Por_Liga.html")
     fig.show()
     return df_ve_liga
 
@@ -94,7 +100,7 @@ def get_df_efficients_teams(df):
 
     # Una vez hecho los cálculos, los esribimos en un csv
 
-    df_efficient_equipos.write_csv("data_output/Equipos_Eficientes_GD_Puntos_Por_Partido.csv") 
+    df_efficient_equipos.write_csv(DIRECTORIO_CSV+"/Equipos_Eficientes_GD_Puntos_Por_Partido.csv") 
 
     # Luego lo pintamos en un scatter
 
@@ -104,12 +110,12 @@ def get_df_efficients_teams(df):
         y="points_per_game",
         color="name_league",
         hover_name="name",
-        title="Goal Difference vs Points per Game",
+        title="Goles de diferencia vs puntos por partido",
         trendline="ols" # Pintamos también la linea de tendencia de cada liga
     )
 
     # Podemos ver que la diferencia de goles y los puntos por partido tiene una correlación positiva, cuanto más diferencia de goles tengas, mayor puntos por partido obtienes
-
+    fig.write_html(DIRECTORIO_GRAFICOS+"/Equipos_Eficientes_GD_Puntos_Por_Partido.html")
     fig.show()
     return df_efficient_equipos
 
@@ -130,7 +136,7 @@ def get_df_goals_against_goals_for_teams(df):
         (pl.col("goals_against")/pl.col("played")).alias("avg_goals_against") # Calculamos la media de goles en contra por partido
     ])
 
-    df_goals_against_goals_for_team.write_csv("data_output/Ataques_vs_Defensas_Por_Equipo.csv") # Lo guardamos en un csv
+    df_goals_against_goals_for_team.write_csv(DIRECTORIO_CSV+"/Ataques_vs_Defensas_Por_Equipo.csv") # Lo guardamos en un csv
 
     fig = px.scatter(
         df_goals_against_goals_for_team.to_pandas(),  # Plotly trabaja mejor con pandas
@@ -196,6 +202,7 @@ def get_df_goals_against_goals_for_teams(df):
         font=dict(size=12, color="gray")
     )
     fig.update_layout(template="plotly_white")
+    fig.write_html(DIRECTORIO_GRAFICOS+"/Ataques_vs_Defensas_Por_Equipo.html")
     fig.show()
     return df_goals_against_goals_for_team
 
@@ -215,11 +222,11 @@ def get_df_goals_against_leagues(df):
             pl.sum("goals_against").alias("goals_against"), # Sumamos todos los goles en contra de cada liga
             pl.sum("played").alias("played") # Sumamos los partidos jugados de la liga
         ]).with_columns([
-            (pl.col("goals_against")/pl.col("played")).alias("avg_goals_against") # Calculamoms la media de goles en contra por partido de cada liga
+            (pl.col("goals_against")/pl.col("played")).alias("avg_goals_against") # Calculamos la media de goles en contra por partido de cada liga
         ])
     )
 
-    df_goals_against_liga.write_csv("data_output/Ligas_Mas_Defensivas.csv") # Lo guardamos en un csv
+    df_goals_against_liga.write_csv(DIRECTORIO_CSV+"/Ligas_Mas_Defensivas.csv") # Lo guardamos en un csv
 
     # Pintamos gráficos de barra para mostrar los resultados
     fig = px.bar(
@@ -235,6 +242,7 @@ def get_df_goals_against_leagues(df):
         df_goals_against_liga["played"].sum()
     )
     fig.add_hline(y=global_avg, line_dash="dash", line_color="black")
+    fig.write_html(DIRECTORIO_GRAFICOS+"/Ligas_Mas_Defensivas.html")
     fig.show()
     return df_goals_against_liga
 
@@ -250,9 +258,10 @@ def get_df_avg_league_match_goals(df):
     avg_league_matches_goals = df_goals_league.group_by("name_league").mean()
     avg_league_goals = avg_league_matches_goals.with_columns((pl.col("goals_against") / pl.col("played")).alias("avg_league_goals"))
 
-    avg_league_goals.write_csv("data_output/Media_Goles_Partido_Ligas.csv")
+    avg_league_goals.write_csv(DIRECTORIO_CSV+"/Media_Goles_Partido_Ligas.csv")
 
     fig = px.pie(avg_league_goals, values='avg_league_goals', names='name_league', title='Media de goles por partido de cada liga')
+    fig.write_html(DIRECTORIO_GRAFICOS+"/Media_Goles_Partido_Ligas.html")
     fig.show()
     return avg_league_goals
 
@@ -268,9 +277,10 @@ def get_df_avg_league_match_pts(df):
     avg_league_pts = df_pts_league.group_by("name_league").mean()
     avg_league_matches_pts = avg_league_pts.with_columns((pl.col("points") / pl.col("played")).alias("mean_league_pts_match"))
 
-    avg_league_matches_pts.write_csv("data_output/Media_Puntos_Partidos_Ligas.csv")
+    avg_league_matches_pts.write_csv(DIRECTORIO_CSV+"/Media_Puntos_Partidos_Ligas.csv")
 
     fig = px.pie(avg_league_matches_pts, values='mean_league_pts_match', names='name_league', title='Media de puntos por partido de cada liga')
+    fig.write_html(DIRECTORIO_GRAFICOS+"/Media_Puntos_Partidos_Ligas.html")
     fig.show()
     return avg_league_matches_pts
 
@@ -383,7 +393,7 @@ def get_df_goals_assist_wingers(df, wingers):
     )
     .sort("total_contribution", descending=True)
     )
-
+    df_wingers.write_csv(DIRECTORIO_CSV+"/Goles_Asistencias_Extremos.csv")
     df_pd = df_wingers.to_pandas()
 
     fig = make_subplots(
@@ -443,6 +453,7 @@ def get_df_goals_assist_wingers(df, wingers):
     fig.update_xaxes(title_text="Goles", row=1, col=2)
     fig.update_yaxes(title_text="Asistencias", row=1, col=2)
 
+    fig.write_html(DIRECTORIO_GRAFICOS+"/Goles_Asistencias_Extremos.html")
     fig.show()
     return df_wingers
 
@@ -452,6 +463,8 @@ def get_df_fouls_received_per_game(df, wingers):
     df_fouls_per_game = df_wingers.with_columns(
     (pl.col("fouls_received") / pl.col("games_played")).alias("fouls_per_game")
     )
+
+    df_fouls_per_game.write_csv(DIRECTORIO_CSV+"/Faltas_Recibidas_Extremos.csv")
 
     # Pintamos gráficos de barra para mostrar los resultados
     fig = px.bar(
@@ -463,6 +476,7 @@ def get_df_fouls_received_per_game(df, wingers):
         title="Faltas cometidas a los extremos por partido"
     )
 
+    fig.write_html(DIRECTORIO_GRAFICOS+"/Faltas_Recibidas_Extremos.html")
     fig.show()
     return df_fouls_per_game
 
@@ -502,7 +516,7 @@ def get_df_avg_team_ages(df_players, df_goalkeepers):
     # un efecto de "escalera" visual y facilitar el ranking de equipos.
     df_avg_team_ages = df_avg_team_ages.sort("avg_age", descending=False)
 
-    df_avg_team_ages.write_csv("data_output/Media_Edades_Equipos.csv")
+    df_avg_team_ages.write_csv(DIRECTORIO_CSV+"/Media_Edades_Equipos.csv")
 
     # 5. CREACIÓN DEL GRÁFICO (SCATTER / DOT PLOT)
     fig = px.scatter(
@@ -561,6 +575,7 @@ def get_df_avg_team_ages(df_players, df_goalkeepers):
     )
 
     # Renderizar el gráfico
+    fig.write_html(DIRECTORIO_GRAFICOS+"/Media_Edades_Equipos.html")
     fig.show()
     
     # Retornamos el DataFrame procesado por si se requiere en otras funciones
@@ -592,7 +607,7 @@ def get_df_total_goals_by_nationality_map(df_players):
         .sort("total_goals", descending=True)
     )
 
-    df_total_country_goals.write_csv("data_output/Total_Goles_Nacionalidad.csv")
+    df_total_country_goals.write_csv(DIRECTORIO_CSV+"/Total_Goles_Nacionalidad.csv")
 
     # =========================================================================
     # MAPEO DE PAÍSES PARA PLOTLY (De Español a Código ISO Alpha-3)
@@ -653,6 +668,7 @@ def get_df_total_goals_by_nationality_map(df_players):
         )
     )
     
+    fig.write_html(DIRECTORIO_GRAFICOS+"/Total_Goles_Nacionalidad.html")
     fig.show()
     return df_total_country_goals
 
