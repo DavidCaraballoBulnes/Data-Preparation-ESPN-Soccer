@@ -238,9 +238,9 @@ def get_df_goals_against_leagues(df):
     fig.show()
     return df_goals_against_liga
 
-def show_avg_league_goals(df):
+def get_df_avg_league_match_goals(df):
     """
-    Docstring para show_avg_league_goals
+    Docstring para get_df_avg_league_match_goals
 
     Método para mostrar gráficamente la media de los goles por partido por cada liga.
     
@@ -249,13 +249,16 @@ def show_avg_league_goals(df):
     df_goals_league = df.drop(["name", "wins", "goals_for", "points", "draws"])
     avg_league_matches_goals = df_goals_league.group_by("name_league").mean()
     avg_league_goals = avg_league_matches_goals.with_columns((pl.col("goals_against") / pl.col("played")).alias("avg_league_goals"))
-    fig = px.pie(avg_league_goals, values='avg_league_goals', names='name_league', title='Media de goles por liga')
+
+    avg_league_goals.write_csv("data_output/Media_Goles_Partido_Ligas.csv")
+
+    fig = px.pie(avg_league_goals, values='avg_league_goals', names='name_league', title='Media de goles por partido de cada liga')
     fig.show()
     return avg_league_goals
 
-def show_avg_league_match_pts(df):
+def get_df_avg_league_match_pts(df):
     """
-    Docstring para show_avg_league_match_pts
+    Docstring para get_df_avg_league_match_pts
 
     Método para mostrar gráficamente la media de puntos que se consiguen por partido en cada liga.
 
@@ -264,12 +267,116 @@ def show_avg_league_match_pts(df):
     df_pts_league = df.drop(["name", "wins", "goals_for", "draws", "goals_against"])
     avg_league_pts = df_pts_league.group_by("name_league").mean()
     avg_league_matches_pts = avg_league_pts.with_columns((pl.col("points") / pl.col("played")).alias("mean_league_pts_match"))
+
+    avg_league_matches_pts.write_csv("data_output/Media_Puntos_Partidos_Ligas.csv")
+
     fig = px.pie(avg_league_matches_pts, values='mean_league_pts_match', names='name_league', title='Media de puntos por partido de cada liga')
     fig.show()
     return avg_league_matches_pts
 
-def get_goals_assist_wingers(df):
-    df_wingers = df.drop(["team_name", "games_played"])
+df_avg_league_goals = get_df_avg_league_match_goals(df)
+
+df_avg_league_match_pts = get_df_avg_league_match_pts(df)
+
+df_ve_ligue = get_df_victory_draw_for_league(df)
+
+df_efficient_teams = get_df_efficients_teams(df)
+
+df_goals_against_goals_for_teams = get_df_goals_against_goals_for_teams(df)
+
+df_goals_against_leagues = get_df_goals_against_leagues(df)
+
+
+# Gráficos de jugadores
+
+wings_players = ["Vinícius Júnior", "Nico Williams", "Antony", "Lamine Yamal", "Raphinha", "Marcus Rashford", "Mohamed Salah", "Rafael Leão", "Jérémy Doku", "Alejandro Garnacho", "Arnaut Danjuma", "Thiago Almada", "Chidera Ejuke"]
+# Convertimos la lista en string SQL
+players_sql_wingers = ", ".join([f"'{player}'" for player in wings_players])
+
+query = f"""
+SELECT 
+    -- Columnas de la tabla field_players (Jugadores)
+    fp.id AS player_id,
+    fp.name AS player_name,
+    fp.dorsal,
+    fp.position,
+    fp.age,
+    fp.nationality,
+    fp.height,
+    fp.weight,
+    fp.games_played,
+    fp.starts,
+    fp.subs,
+    fp.goals,
+    fp.assists,
+    fp.shots_on_target,
+    fp.fouls_committed,
+    fp.fouls_received,
+    fp.yellow_cards,
+    fp.red_cards,
+    fp.team_id AS player_team_id,
+    fp.league_id AS player_league_id,
+
+    -- Columnas de la tabla teams (Equipos)
+    t.id AS team_id,
+    t.name AS team_name,
+    t.logo AS team_logo,
+    t.league_id AS team_league_id,
+
+    -- Columnas de la tabla league (Ligas)
+    l.id_league,
+    l.name_league,
+    CAST(l.year AS TEXT) AS league_year
+    
+FROM field_players fp
+INNER JOIN teams t ON fp.team_id = t.id
+INNER JOIN league l ON fp.league_id = l.id_league
+"""
+
+df_players = pl.read_database_uri(query=query, uri=uri)
+
+query_porteros = f"""
+SELECT 
+    -- Columnas de la tabla goalkeepers (Porteros)
+    gk.id AS player_id,
+    gk.name AS player_name,
+    gk.dorsal,
+    gk.position,
+    gk.age,
+    gk.nationality,
+    gk.height,
+    gk.weight,
+    gk.games_played,
+    gk.saves,              -- Atajadas (específico de porteros)
+    gk.goals_conceded,     -- Goles encajados (específico de porteros)
+    gk.fouls_committed,
+    gk.fouls_received,
+    gk.yellow_cards,
+    gk.red_cards,
+    gk.team_id AS player_team_id,
+    gk.league_id AS player_league_id,
+
+    -- Columnas de la tabla teams (Equipos)
+    t.id AS team_id,
+    t.name AS team_name,
+    t.logo AS team_logo,
+    t.league_id AS team_league_id,
+
+    -- Columnas de la tabla league (Ligas)
+    l.id_league,
+    l.name_league,
+    CAST(l.year AS TEXT) AS league_year
+    
+FROM goalkeepers gk
+INNER JOIN teams t ON gk.team_id = t.id
+INNER JOIN league l ON gk.league_id = l.id_league
+"""
+
+df_goalkeepers = pl.read_database_uri(query=query_porteros, uri=uri)
+
+def get_df_goals_assist_wingers(df, wingers):
+    df_wingers = df.filter(pl.col("player_name").is_in(wingers))
+    df_wingers = df_wingers.drop(["team_name", "games_played"])
     df_wingers = (
     df_wingers.with_columns(
         (pl.col("goals") + pl.col("assists")).alias("total_contribution")
@@ -288,7 +395,7 @@ def get_goals_assist_wingers(df):
     # Barras apiladas
     fig.add_trace(
         go.Bar(
-            x=df_pd["name"],
+            x=df_pd["player_name"],
             y=df_pd["goals"],
             name="Goles"
         ),
@@ -297,7 +404,7 @@ def get_goals_assist_wingers(df):
 
     fig.add_trace(
         go.Bar(
-            x=df_pd["name"],
+            x=df_pd["player_name"],
             y=df_pd["assists"],
             name="Asistencias"
         ),
@@ -310,7 +417,7 @@ def get_goals_assist_wingers(df):
             x=df_pd["goals"],
             y=df_pd["assists"],
             mode="markers+text",
-            text=df_pd["name"],
+            text=df_pd["player_name"],
             textposition="top center",
             name="Jugador",
             marker=dict(
@@ -339,18 +446,19 @@ def get_goals_assist_wingers(df):
     fig.show()
     return df_wingers
 
-def get_fouls_received_per_game(df):
-    df_fouls_per_game = df.drop(["team_name", "name_league", "goals", "assists"])
-    df_fouls_per_game = df.with_columns(
+def get_df_fouls_received_per_game(df, wingers):
+    df_wingers = df.filter(pl.col("player_name").is_in(wingers))
+    df_wingers = df_wingers.drop(["team_name", "name_league", "goals", "assists"])
+    df_fouls_per_game = df_wingers.with_columns(
     (pl.col("fouls_received") / pl.col("games_played")).alias("fouls_per_game")
     )
 
     # Pintamos gráficos de barra para mostrar los resultados
     fig = px.bar(
         df_fouls_per_game.to_pandas(),
-        x="name",
+        x="player_name",
         y="fouls_per_game",
-        color="name",
+        color="player_name",
         color_continuous_scale="Reds",
         title="Faltas cometidas a los extremos por partido"
     )
@@ -358,41 +466,201 @@ def get_fouls_received_per_game(df):
     fig.show()
     return df_fouls_per_game
 
-show_avg_league_goals(df)
-show_avg_league_match_pts(df)
+def get_df_avg_team_ages(df_players, df_goalkeepers):
+    """
+    Calcula y grafica la edad media de cada equipo utilizando un gráfico 
+    de puntos (Cleveland Dot Plot). 
+    Incluye un componente interactivo (Slider) para ajustar la altura del gráfico.
+    
+    :param df_players: pl.DataFrame con los datos de los jugadores de campo.
+    :param df_goalkeepers: pl.DataFrame con los datos de los porteros.
+    :return: pl.DataFrame con la edad media calculada por equipo.
+    """
+    # 1. CONSOLIDACIÓN DE DATOS
+    # Unimos a los jugadores de campo y a los porteros para obtener la plantilla completa.
+    # Seleccionamos únicamente las columnas necesarias para optimizar la memoria.
+    df_team_ages = pl.concat([
+        df_players['player_name', 'age', 'team_name', 'name_league'], 
+        df_goalkeepers['player_name', 'age', 'team_name', 'name_league']
+    ])
 
-df_ve_liga = get_df_victory_draw_for_league(df)
+    # 2. LIMPIEZA DE DATOS (DATA IMPUTATION)
+    # Corrección manual de un valor atípico (nulo). 
+    # Tras una investigación externa, se determinó que el jugador sin edad registrada tiene 16 años.
+    df_team_ages = df_team_ages.with_columns(
+        pl.col("age").fill_null(16)
+    )
 
-df_efficient_teams = get_df_efficients_teams(df)
+    # 3. AGREGACIÓN Y CÁLCULO
+    # Agrupamos por equipo y calculamos la media aritmética de la columna 'age'.
+    df_avg_team_ages = df_team_ages.group_by("team_name").agg(
+        pl.col("age").mean().alias("avg_age")
+    )
 
-df_goals_against_goals_for_teams = get_df_goals_against_goals_for_teams(df)
+    # 4. ORDENACIÓN
+    # Ordenar los datos de menor a mayor es crucial en un Dot Plot para crear 
+    # un efecto de "escalera" visual y facilitar el ranking de equipos.
+    df_avg_team_ages = df_avg_team_ages.sort("avg_age", descending=False)
 
-df_goals_against_leagues = get_df_goals_against_leagues(df)
+    df_avg_team_ages.write_csv("data_output/Media_Edades_Equipos.csv")
+
+    # 5. CREACIÓN DEL GRÁFICO (SCATTER / DOT PLOT)
+    fig = px.scatter(
+        df_avg_team_ages.to_pandas(), 
+        x="avg_age", 
+        y="team_name",
+        title="Edad Media de las Plantillas por Equipo",
+        labels={
+            "avg_age": "Edad Media (Años)",
+            "team_name": "" # Se omite el título del eje Y por ser redundante
+        },
+        color="avg_age", 
+        color_continuous_scale="RdYlBu_r" # Escala divergente: Azul (Jóvenes) -> Rojo (Veteranos)
+    )
+
+    # Ajustes estéticos de los marcadores (puntos más grandes y con borde para destacar)
+    fig.update_traces(
+        marker=dict(size=14, line=dict(width=1, color="DarkSlateGrey"))
+    )
+
+    # =========================================================================
+    # 6. CONFIGURACIÓN DE INTERACTIVIDAD: SLIDER DE ALTURA
+    # =========================================================================
+    steps = []
+    # Definimos el rango de alturas permitidas para el slider (600px a 1500px, en saltos de 100px)
+    alturas_disponibles = list(range(600, 1600, 100))
+    altura_por_defecto = 900
+    indice_por_defecto = alturas_disponibles.index(altura_por_defecto)
+    
+    # Construcción de las opciones (steps) del slider
+    for h in alturas_disponibles:
+        step = dict(
+            method="relayout",          # 'relayout' modifica únicamente propiedades de diseño de la figura
+            args=[{"height": h}],       # Se pasa el nuevo valor de altura
+            label=f"{h} px"             # Etiqueta visible bajo la marca del slider
+        )
+        steps.append(step)
+
+    # Ensamblaje del componente Slider con su formato
+    sliders = [dict(
+        active=indice_por_defecto,
+        currentvalue={"prefix": "Altura actual: "},
+        pad={"t": 60},                  # Separación superior (padding-top) para no pisar el eje X
+        steps=steps
+    )]
+
+    # 7. APLICACIÓN DEL LAYOUT FINAL
+    fig.update_layout(
+        plot_bgcolor="white",
+        # Cuadrículas de fondo para guiar la vista desde el nombre del equipo hasta el punto
+        yaxis=dict(showgrid=True, gridcolor="whitesmoke", gridwidth=1),
+        xaxis=dict(showgrid=True, gridcolor="lightgray", gridwidth=1, zeroline=False),
+        height=altura_por_defecto,      # Altura inicial sincronizada con el slider
+        coloraxis_colorbar=dict(title="Edad"),
+        sliders=sliders                 # Inserción del control interactivo en la figura
+    )
+
+    # Renderizar el gráfico
+    fig.show()
+    
+    # Retornamos el DataFrame procesado por si se requiere en otras funciones
+    return df_avg_team_ages
+
+def get_df_total_goals_by_nationality_map(df_players):
+    """
+    Calcula la SUMA TOTAL de goles por nacionalidad y lo representa 
+    en un mapa geográfico interactivo (Choropleth).
+    """
+    
+    # 1. Seleccionamos columnas y rellenamos nulos con 0
+    df_team_country_goals = (
+        df_players
+        .select(["player_name", "nationality", "goals", "team_name", "name_league"])
+        .with_columns(pl.col("goals").fill_null(0))
+    )
+    
+    # 2. Agrupación y Suma de goles (en lugar de media)
+    df_total_country_goals = df_team_country_goals.group_by("nationality").agg(
+        pl.col("goals").sum().alias("total_goals"),                 # Suma de goles
+        pl.col("player_name").count().alias("player_count")         # Conteo de jugadores
+    )
+    
+    # 3. Filtramos países que tengan al menos 1 gol para limpiar el mapa
+    df_total_country_goals = (
+        df_total_country_goals
+        .filter(pl.col("total_goals") > 0)
+        .sort("total_goals", descending=True)
+    )
+
+    df_total_country_goals.write_csv("data_output/Total_Goles_Nacionalidad.csv")
+
+    # =========================================================================
+    # MAPEO DE PAÍSES PARA PLOTLY (De Español a Código ISO Alpha-3)
+    # =========================================================================
+    PAISES_ISO = {
+        "España": "ESP", "Argentina": "ARG", "Brasil": "BRA", "Francia": "FRA",
+        "Uruguay": "URY", "Alemania": "DEU", "Inglaterra": "GBR", "Portugal": "PRT",
+        "Italia": "ITA", "Países Bajos": "NLD", "Holanda": "NLD", "Bélgica": "BEL",
+        "Croacia": "HRV", "Marruecos": "MAR", "Colombia": "COL", "Senegal": "SEN",
+        "Suiza": "CHE", "Polonia": "POL", "Serbia": "SRB", "Gales": "WAL",
+        "Estados Unidos": "USA", "México": "MEX", "Ecuador": "ECU", "Ghana": "GHA",
+        "Camerún": "CMR", "Corea del Sur": "KOR", "Japón": "JPN", "Canadá": "CAN",
+        "Costa Rica": "CRI", "Dinamarca": "DNK", "Túnez": "TUN", "Arabia Saudita": "SAU",
+        "Australia": "AUS", "Malasia": "MYS", "Finlandia": "FIN", "Grecia": "GRC",
+        "Rumania": "ROU", "Chile": "CHL", "Paraguay": "PRY", "Perú": "PER",
+        "Venezuela": "VEN", "Noruega": "NOR", "Suecia": "SWE", "Turquía": "TUR",
+        "Argelia": "DZA", "Costa de Marfil": "CIV", "Egipto": "EGY", "Nigeria": "NGA",
+        "Mali": "MLI", "Guinea": "GIN", "República Democrática del Congo": "COD",
+        "Ucrania": "UKR", "República Checa": "CZE", "Austria": "AUT", "Escocia": "SCO",
+        "Irlanda": "IRL", "Islandia": "ISL", "Albania": "ALB", "Bosnia y Herzegovina": "BIH"
+    }
+
+    # Convertimos a Pandas para graficar y aplicamos el mapeo
+    df_pandas = df_total_country_goals.to_pandas()
+    
+    # Creamos una nueva columna con el código ISO. Si el país no está en el dicc, lo deja tal cual.
+    df_pandas['iso_alpha'] = df_pandas['nationality'].map(PAISES_ISO).fillna(df_pandas['nationality'])
+
+    # 4. Creación del Mapa (Choropleth) con Plotly
+    fig = px.choropleth(
+        df_pandas,
+        locations="iso_alpha",          # Usamos los códigos ISO (ej: "ESP", "ARG")
+        color="total_goals",            # La intensidad del color depende de los goles
+        hover_name="nationality",       # Al pasar el ratón, queremos leer "España", no "ESP"
+        hover_data={
+            "iso_alpha": False,         # Ocultamos el código ISO en el recuadro flotante
+            "player_count": True, 
+            "total_goals": True
+        },
+        title="Suma Total de Goles por Nacionalidad",
+        labels={
+            "total_goals": "Goles Totales",
+            "player_count": "Nº Jugadores",
+            "nationality": "País"
+        },
+        color_continuous_scale="Viridis", # Una paleta que contrasta muy bien en mapas
+        projection="natural earth"        # Hace que el mapa se vea curvado/realista en vez de un rectángulo plano
+    )
+    
+    # Estilo del mapa
+    fig.update_layout(
+        margin={"r":0, "t":50, "l":0, "b":0},
+        geo=dict(
+            showframe=False,        # Quita el marco negro exterior
+            showcoastlines=True,    # Dibuja las costas
+            coastlinecolor="Black",
+            projection_type='natural earth'
+        )
+    )
+    
+    fig.show()
+    return df_total_country_goals
 
 
-# Gráficos de jugadores
+df_wingers = get_df_goals_assist_wingers(df_players, wings_players)
 
-wings_players = ["Antony", "Vinícius Júnior", "Lamine Yamal", "Raphinha", "Nico Williams", "Marcus Rashford", "Mohamed Salah", "Rafael Leão", "Jérémy Doku", "Alejandro Garnacho", "Arnaut Danjuma"]
-# Convertimos la lista en string SQL
-players_sql = ", ".join([f"'{player}'" for player in wings_players])
+df_fouls_wingers_per_game = get_df_fouls_received_per_game(df_players, wings_players)
 
-query = f"""
-SELECT 
-    fp.name,
-    fp.games_played,
-    fp.goals,
-    fp.assists,
-    fp.fouls_received,
-    t.name AS team_name,
-    l.name_league
-FROM field_players fp
-INNER JOIN teams t ON fp.team_id = t.id
-INNER JOIN league l ON fp.league_id = l.id_league
-WHERE fp.name IN ({players_sql})
-"""
+df_avg_team_ages = get_df_avg_team_ages(df_players, df_goalkeepers)
 
-df_players = pl.read_database_uri(query=query, uri=uri)
-
-df_wingers = get_goals_assist_wingers(df_players)
-
-df_fouls_wingers_per_game = get_fouls_received_per_game(df_players)
+df_total_goals_nationality = get_df_total_goals_by_nationality_map(df_players)

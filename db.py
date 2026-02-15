@@ -196,7 +196,8 @@ def normalize_text(text):
 
 def insert_players_from_dataframe(df_porteros, df_campo):
     """
-    Limpia las tablas de jugadores e inserta los nuevos datos normalizando nombres.
+    Limpia las tablas de jugadores e inserta los nuevos datos normalizando nombres
+    y usando un diccionario de alias para emparejar diferencias entre Web y API.
     """
     conn = sqlite3.connect("soccer.db")
     cursor = conn.cursor()
@@ -206,8 +207,6 @@ def insert_players_from_dataframe(df_porteros, df_campo):
     # 1. LIMPIEZA PREVIA (Borrar datos antiguos)
     cursor.execute("DELETE FROM field_players")
     cursor.execute("DELETE FROM goalkeepers")
-    
-    # Opcional: Reiniciar los contadores de ID autoincrementales
     cursor.execute("DELETE FROM sqlite_sequence WHERE name='field_players'")
     cursor.execute("DELETE FROM sqlite_sequence WHERE name='goalkeepers'")
     conn.commit()
@@ -224,15 +223,35 @@ def insert_players_from_dataframe(df_porteros, df_campo):
         clave_normalizada = normalize_text(nombre_original)
         mapa_equipos[clave_normalizada] = {'id': id_equipo, 'league_id': id_liga}
 
+    ALIAS_EQUIPOS = {
+        "atletico de madrid": "atletico madrid",
+        "sevilla fc": "sevilla",
+        "brighton hove albion" : "brighton & hove albion",
+        "bolonia" : "bologna",
+        "genova" : "genoa",
+        "1 fc heidenheim 1846" : "1. fc heidenheim 1846",
+        "1 fc union berlin" : "1. fc union berlin",
+        "f c augsburgo" : "fc augsburg",
+        "st pauli" : "st. pauli"
+    }
+
     def obtener_ids(nombre_equipo_df):
+        # 1. Normalizamos lo que viene del DataFrame (ej: "Atletico De Madrid" -> "atletico de madrid")
         nombre_limpio = normalize_text(nombre_equipo_df)
+        
+        # 2. Aplicamos el parche del diccionario si existe en nuestros alias
+        if nombre_limpio in ALIAS_EQUIPOS:
+            nombre_limpio = ALIAS_EQUIPOS[nombre_limpio]
+            
+        # 3. Buscamos en la base de datos
         datos = mapa_equipos.get(nombre_limpio)
         if datos:
             return datos['id'], datos['league_id']
         else:
+            print(f"⚠️ AVISO: No se ha encontrado el equipo '{nombre_equipo_df}' en la BD. Sus jugadores no se insertarán.")
             return None, None
 
-    # 3. INSERTAR JUGADORES DE CAMPO    
+    # 3. INSERTAR JUGADORES DE CAMPO
     sql_campo = """
         INSERT INTO field_players (
             name, dorsal, position, age, nationality, height, weight,
@@ -246,7 +265,7 @@ def insert_players_from_dataframe(df_porteros, df_campo):
     
     for row in df_campo.iter_rows(named=True):
         team_id, league_id = obtener_ids(row['EQUIPO'])
-        
+
         if team_id:
             batch_campo.append((
                 row['NOMBRE'], row['DORSAL'], row['POS'], row['EDAD'], row['NAC'],
@@ -257,6 +276,7 @@ def insert_players_from_dataframe(df_porteros, df_campo):
                 team_id, league_id
             ))
     
+    print(f"JUGADORES: {len(batch_campo)}")
     if batch_campo:
         cursor.executemany(sql_campo, batch_campo)
         conn.commit()
@@ -286,6 +306,7 @@ def insert_players_from_dataframe(df_porteros, df_campo):
                 team_id, league_id
             ))
             
+    print(f"PORTEROS: {len(batch_porteros)}")
     if batch_porteros:
         cursor.executemany(sql_porteros, batch_porteros)
         conn.commit()
