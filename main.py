@@ -12,10 +12,10 @@ db_path = "soccer.db"
 # Crear la URI de conexión para SQLite
 uri = f"sqlite://{db_path}"
 
-# Consulta SQL
+# Consulta SQL principal para extraer estadísticas generales ligadas a equipos y ligas
 query = "SELECT name, played, wins, draws, points, goals_against, goals_for, name_league  FROM stats s INNER JOIN teams t ON team_id=id INNER JOIN league l ON league_id=id_league"
 
-# Leer la base de datos con Polars
+# Leer la base de datos con Polars empleando la query generada
 df = pl.read_database_uri(query=query, uri=uri)
 
 # Crear directorio de almacenamiento de CSV si no existe
@@ -237,11 +237,14 @@ def get_df_goals_against_leagues(df):
         color_continuous_scale="Reds",
         title="Promedio de goles encajados por partido por liga"
     )
+    
+    # Calculamos la media global para añadirla como línea de referencia en el gráfico
     global_avg = (
         df_goals_against_liga["goals_against"].sum() /
         df_goals_against_liga["played"].sum()
     )
     fig.add_hline(y=global_avg, line_dash="dash", line_color="black")
+    
     fig.write_html(DIRECTORIO_GRAFICOS+"/Ligas_Mas_Defensivas.html")
     fig.show()
     return df_goals_against_liga
@@ -254,12 +257,19 @@ def get_df_avg_league_match_goals(df):
     
     :param df: DataFrame con los datos a tratar y graficar
     """
+    # Descartamos variables irrelevantes para enfocarnos únicamente en los cálculos de goles
     df_goals_league = df.drop(["name", "wins", "goals_for", "points", "draws"])
+    
+    # Agrupamos por la liga para extraer la media aritmética de las columnas numéricas
     avg_league_matches_goals = df_goals_league.group_by("name_league").mean()
+    
+    # Calculamos la media de goles general dividiendo goles en contra entre los partidos jugados
     avg_league_goals = avg_league_matches_goals.with_columns((pl.col("goals_against") / pl.col("played")).alias("avg_league_goals"))
 
+    # Exportamos el DataFrame transformado a formato CSV
     avg_league_goals.write_csv(DIRECTORIO_CSV+"/Media_Goles_Partido_Ligas.csv")
 
+    # Representamos la proporción de goles mediante un gráfico de tipo Pie (Tarta)
     fig = px.pie(avg_league_goals, values='avg_league_goals', names='name_league', title='Media de goles por partido de cada liga')
     fig.write_html(DIRECTORIO_GRAFICOS+"/Media_Goles_Partido_Ligas.html")
     fig.show()
@@ -273,16 +283,27 @@ def get_df_avg_league_match_pts(df):
 
     :param df: DataFrame con los datos a tratar y graficar
     """
+    # Eliminamos columnas que no intervienen en el cálculo de eficiencia por puntos
     df_pts_league = df.drop(["name", "wins", "goals_for", "draws", "goals_against"])
+    
+    # Obtenemos las medias base agrupando los datos según la liga
     avg_league_pts = df_pts_league.group_by("name_league").mean()
+    
+    # Generamos la métrica final de puntos por partido (puntos obtenidos / partidos disputados)
     avg_league_matches_pts = avg_league_pts.with_columns((pl.col("points") / pl.col("played")).alias("mean_league_pts_match"))
 
+    # Guardamos los resultados para alimentar visualizaciones externas si es necesario
     avg_league_matches_pts.write_csv(DIRECTORIO_CSV+"/Media_Puntos_Partidos_Ligas.csv")
 
+    # Representamos los datos en un gráfico de tarta para comparar el peso relativo de cada liga
     fig = px.pie(avg_league_matches_pts, values='mean_league_pts_match', names='name_league', title='Media de puntos por partido de cada liga')
     fig.write_html(DIRECTORIO_GRAFICOS+"/Media_Puntos_Partidos_Ligas.html")
     fig.show()
     return avg_league_matches_pts
+
+# =========================================================================
+# EJECUCIÓN: ANÁLISIS A NIVEL DE EQUIPOS Y LIGAS
+# =========================================================================
 
 df_avg_league_goals = get_df_avg_league_match_goals(df)
 
@@ -303,6 +324,7 @@ wings_players = ["Vinícius Júnior", "Nico Williams", "Antony", "Lamine Yamal",
 # Convertimos la lista en string SQL
 players_sql_wingers = ", ".join([f"'{player}'" for player in wings_players])
 
+# Consulta SQL estructurada para extraer las estadísticas exhaustivas de jugadores de campo (field_players)
 query = f"""
 SELECT 
     -- Columnas de la tabla field_players (Jugadores)
@@ -343,8 +365,10 @@ INNER JOIN teams t ON fp.team_id = t.id
 INNER JOIN league l ON fp.league_id = l.id_league
 """
 
+# Generación del DataFrame para jugadores de campo
 df_players = pl.read_database_uri(query=query, uri=uri)
 
+# Consulta SQL estructurada para aislar las estadísticas específicas y únicas de los porteros (goalkeepers)
 query_porteros = f"""
 SELECT 
     -- Columnas de la tabla goalkeepers (Porteros)
@@ -382,27 +406,49 @@ INNER JOIN teams t ON gk.team_id = t.id
 INNER JOIN league l ON gk.league_id = l.id_league
 """
 
+# Generación del DataFrame exclusivamente para porteros
 df_goalkeepers = pl.read_database_uri(query=query_porteros, uri=uri)
 
 def get_df_goals_assist_wingers(df, wingers):
+    """
+    Docstring para get_df_goals_assist_wingers
+
+    Filtra los datos de los jugadores para centrarse en una lista específica de extremos (wingers).
+    Calcula su contribución ofensiva total (Goles + Asistencias) y genera una visualización 
+    compuesta: un gráfico de barras apiladas y un gráfico de dispersión (Scatter Plot).
+
+    :param df: DataFrame general con las métricas de los jugadores.
+    :param wingers: Lista de cadenas que contiene los nombres de los extremos seleccionados.
+    :return: DataFrame filtrado y ordenado con el análisis individual de cada jugador.
+    """
+    # Aislamos a los jugadores utilizando la lista de parámetros introducida
     df_wingers = df.filter(pl.col("player_name").is_in(wingers))
+    
+    # Descartamos columnas prescindibles para el contexto de contribución de goles
     df_wingers = df_wingers.drop(["team_name", "games_played"])
+    
+    # Computamos la contribución total agregando goles y asistencias, y ordenamos los resultados de mayor a menor
     df_wingers = (
     df_wingers.with_columns(
         (pl.col("goals") + pl.col("assists")).alias("total_contribution")
     )
     .sort("total_contribution", descending=True)
     )
+    
+    # Volcamos a CSV para posibilitar análisis independientes
     df_wingers.write_csv(DIRECTORIO_CSV+"/Goles_Asistencias_Extremos.csv")
+    
+    # Convertimos a Pandas para integrarlo sin incidencias con la librería Plotly
     df_pd = df_wingers.to_pandas()
 
+    # Preparamos un lienzo con 1 fila y 2 columnas para el reporte dual
     fig = make_subplots(
         rows=1, cols=2,
         subplot_titles=("Goles + Asistencias", "Goles vs Asistencias"),
         horizontal_spacing=0.15
     )
 
-    # Barras apiladas
+    # Barras apiladas: Trazado de los goles aportados
     fig.add_trace(
         go.Bar(
             x=df_pd["player_name"],
@@ -412,6 +458,7 @@ def get_df_goals_assist_wingers(df, wingers):
         row=1, col=1
     )
 
+    # Barras apiladas: Trazado de las asistencias aportadas
     fig.add_trace(
         go.Bar(
             x=df_pd["player_name"],
@@ -421,7 +468,7 @@ def get_df_goals_assist_wingers(df, wingers):
         row=1, col=1
     )
 
-    # Scatter plot
+    # Scatter plot: Permite evaluar la relación proporcional entre asistir o anotar
     fig.add_trace(
         go.Scatter(
             x=df_pd["goals"],
@@ -442,11 +489,13 @@ def get_df_goals_assist_wingers(df, wingers):
         row=1, col=2
     )
 
+    # Aseguramos que el barmode se aplique en formato de pila (stack)
     fig.update_layout(
         barmode="stack",
         title="Comparación de Extremos - Goles y Asistencias",
     )
 
+    # Personalizamos las etiquetas de los sub-gráficos
     fig.update_xaxes(title_text="Jugador", row=1, col=1)
     fig.update_yaxes(title_text="Cantidad", row=1, col=1)
 
@@ -458,15 +507,31 @@ def get_df_goals_assist_wingers(df, wingers):
     return df_wingers
 
 def get_df_fouls_received_per_game(df, wingers):
+    """
+    Docstring para get_df_fouls_received_per_game
+
+    Calcula el ratio o promedio de faltas recibidas por partido para una selección de extremos.
+    Genera un gráfico de barras comparativo destacando qué jugadores sufren más el impacto defensivo.
+
+    :param df: DataFrame con las métricas acumuladas de jugadores.
+    :param wingers: Lista de extremos objeto de nuestro análisis.
+    :return: DataFrame actualizado incluyendo el cálculo de faltas promedio.
+    """
+    # Filtramos la tabla general para focalizarnos exclusivamente en los extremos
     df_wingers = df.filter(pl.col("player_name").is_in(wingers))
+    
+    # Descartamos columnas irrelevantes para aligerar la carga de procesamiento
     df_wingers = df_wingers.drop(["team_name", "name_league", "goals", "assists"])
+    
+    # Ejecutamos la métrica dividiendo las faltas recibidas entre los partidos disputados
     df_fouls_per_game = df_wingers.with_columns(
     (pl.col("fouls_received") / pl.col("games_played")).alias("fouls_per_game")
     )
 
+    # Guardado físico de la extracción de datos
     df_fouls_per_game.write_csv(DIRECTORIO_CSV+"/Faltas_Recibidas_Extremos.csv")
 
-    # Pintamos gráficos de barra para mostrar los resultados
+    # Pintamos gráficos de barra para mostrar los resultados de las faltas
     fig = px.bar(
         df_fouls_per_game.to_pandas(),
         x="player_name",
@@ -672,6 +737,9 @@ def get_df_total_goals_by_nationality_map(df_players):
     fig.show()
     return df_total_country_goals
 
+# =========================================================================
+# EJECUCIÓN: ANÁLISIS ESPECÍFICO DE JUGADORES
+# =========================================================================
 
 df_wingers = get_df_goals_assist_wingers(df_players, wings_players)
 

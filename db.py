@@ -2,16 +2,26 @@ import sqlite3
 import unicodedata
 
 def create_tables():
+    """
+    Crea la estructura base de datos relacional para Ligas, Equipos y Estadísticas Generales.
+    Establece las relaciones mediante claves foráneas (Foreign Keys).
+    """
     conn = sqlite3.connect("soccer.db")
     cursor = conn.cursor()
+    
+    # Tabla para almacenar las diferentes ligas y la temporada actual
     cursor.execute(
         "CREATE TABLE IF NOT EXISTS league (id_league INTEGER PRIMARY KEY, name_league TEXT, year INTEGER)"
     )
     conn.commit()
+    
+    # Tabla para almacenar los equipos, vinculada a la tabla de ligas
     cursor.execute(
         "CREATE TABLE IF NOT EXISTS teams (id INTEGER PRIMARY KEY, name TEXT, logo TEXT, league_id INTEGER, FOREIGN KEY(league_id) REFERENCES league(id_league))"
     )
     conn.commit()
+    
+    # Tabla para almacenar las estadísticas de la temporada por equipo (puntos, victorias, etc.)
     cursor.execute(
         "CREATE TABLE IF NOT EXISTS stats (id_stats INTEGER PRIMARY KEY, team_id INTEGER, points INTEGER, played INTEGER, goals_against INTEGER, goals_for INTEGER, wins INTEGER, draws INTEGER, losses INTEGER, position TEXT, FOREIGN KEY(team_id) REFERENCES teams(id))"
     )
@@ -20,62 +30,107 @@ def create_tables():
 
 
 def insert_leagues(leagues):
+    """
+    Inserta o actualiza la información de las ligas en la base de datos.
+    Si la liga cambia de año (nueva temporada), purga los datos antiguos de equipos y estadísticas
+    para asegurar la integridad de la nueva campaña.
+    
+    :param leagues: Tupla o lista con el formato (nombre_liga, año)
+    """
     conn = sqlite3.connect("soccer.db")
     cursor = conn.cursor()
+    
+    # Extraemos los nombres de las ligas ya existentes para comprobar duplicados
     prev_leagues = [
         row[0] for row in cursor.execute("SELECT name_league FROM league").fetchall()
     ]
+    
+    # Si la liga es nueva, la insertamos
     if (leagues[0]) not in prev_leagues:
         cursor.execute(
             "INSERT INTO league (name_league, year) VALUES (?, ?)",
             (leagues[0], leagues[1]),
         )
     else:
+        # Si la liga ya existe, comprobamos si ha cambiado el año (nueva temporada)
         update_league = cursor.execute(
             "SELECT name_league, year FROM league WHERE name_league = ?", (leagues[0],)
         ).fetchone()
+        
+        # Si el año de la API difiere del de la DB, actualizamos el año y reiniciamos estadísticas
         if update_league[1] != leagues[1]:
             cursor.execute(
                 "UPDATE league SET year = ? WHERE name_league = ?",
                 (leagues[1], leagues[0]),
             )
+            # Borrado en cascada manual de las métricas de la temporada anterior
             cursor.execute("DELETE FROM stats")
             cursor.execute("DELETE FROM teams")
+            
     conn.commit()
     conn.close()
 
 
 def insert_teams(teams):
+    """
+    Gestiona la inserción y actualización (Upsert) de los equipos extraídos de la API.
+    Itera el diccionario de equipos, vincula cada uno con su liga y llama a la inserción de sus estadísticas.
+    
+    :param teams: Diccionario con la información estructurada de los equipos y sus estadísticas.
+    """
     conn = sqlite3.connect("soccer.db")
     cursor = conn.cursor()
+    
+    # Obtenemos la lista de equipos actuales para decidir si hacer INSERT o UPDATE
     prev_teams = cursor.execute("SELECT name FROM teams").fetchall()
+    
     for team_name, team_data in teams.items():
+        # Sustituimos el nombre de la liga en el diccionario por el ID numérico de la tabla 'league'
         team_data["league"] = cursor.execute(
             "SELECT id_league FROM league WHERE name_league = ?", (team_data["league"],)
         ).fetchone()[0]
+        
+        # Inserción de equipo nuevo
         if (team_data["nombre"],) not in prev_teams:
             cursor.execute(
                 "INSERT INTO teams (name, league_id, logo) VALUES (?, ?, ?)",
                 (team_data["nombre"], team_data["league"], team_data["logo"]),
             )
+        # Actualización de equipo existente (por si cambia el logo o la liga por ascensos/descensos)
         else:
             cursor.execute(
                 "UPDATE teams SET name = ?, league_id = ?, logo = ? WHERE name = ?",
                 (team_data["nombre"], team_data["league"], team_data["logo"], team_data["nombre"]),
             )
         conn.commit()
+        
+        # Delegamos la inserción de las métricas puras a la función de estadísticas
         insert_stats(team_data["estadisticas"], team_data["nombre"])
+        
     conn.commit()
     conn.close()
 
 
 def insert_stats(stat, nombreEquipo):
+    """
+    Inserta o actualiza las métricas deportivas (clasificación, puntos, goles) 
+    de un equipo específico en la tabla 'stats'.
+    
+    :param stat: Diccionario con las estadísticas (rank, points, goals, etc.)
+    :param nombreEquipo: Nombre del equipo al que pertenecen las estadísticas.
+    """
     conn = sqlite3.connect("soccer.db")
     cursor = conn.cursor()
+    
+    # Recuperamos el ID del equipo recién insertado/actualizado para relacionar las estadísticas
     team_id = cursor.execute("SELECT id FROM teams WHERE name = ?", (nombreEquipo,)).fetchone()
     team_id = team_id[0]
+    
+    # Comprobamos si el equipo ya tiene estadísticas registradas
     prev_stats = cursor.execute("SELECT team_id FROM stats").fetchall()
+    
     if (team_id,) in prev_stats:
+        # Actualizamos la fila existente con los datos más recientes de la jornada
         cursor.execute(
             "UPDATE stats SET position = ?, points = ?, played = ?, goals_against = ?, goals_for = ?, wins = ?, draws = ?, losses = ? WHERE team_id = ?",
             (
@@ -91,6 +146,7 @@ def insert_stats(stat, nombreEquipo):
             ),
         )
     else:
+        # Insertamos el registro de estadísticas por primera vez para este equipo
         cursor.execute(
             "INSERT INTO stats (position, team_id, points, played, goals_against, goals_for, wins, draws, losses) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
@@ -223,6 +279,7 @@ def insert_players_from_dataframe(df_porteros, df_campo):
         clave_normalizada = normalize_text(nombre_original)
         mapa_equipos[clave_normalizada] = {'id': id_equipo, 'league_id': id_liga}
 
+    # Diccionario de alias para corregir discrepancias en los nombres de equipos extraídos de diferentes fuentes
     ALIAS_EQUIPOS = {
         "atletico de madrid": "atletico madrid",
         "sevilla fc": "sevilla",
@@ -236,6 +293,10 @@ def insert_players_from_dataframe(df_porteros, df_campo):
     }
 
     def obtener_ids(nombre_equipo_df):
+        """
+        Función auxiliar interna. Mapea el nombre crudo extraído (Scraping/API) con el ID real 
+        de la base de datos aplicando la lógica de normalización y alias.
+        """
         # 1. Normalizamos lo que viene del DataFrame (ej: "Atletico De Madrid" -> "atletico de madrid")
         nombre_limpio = normalize_text(nombre_equipo_df)
         
@@ -264,6 +325,7 @@ def insert_players_from_dataframe(df_porteros, df_campo):
     batch_campo = []
     
     for row in df_campo.iter_rows(named=True):
+        # Resolvemos las claves foráneas usando la función auxiliar
         team_id, league_id = obtener_ids(row['EQUIPO'])
 
         if team_id:
@@ -277,6 +339,8 @@ def insert_players_from_dataframe(df_porteros, df_campo):
             ))
     
     print(f"JUGADORES: {len(batch_campo)}")
+    
+    # Inserción masiva (bulk insert) para optimizar el rendimiento de SQLite
     if batch_campo:
         cursor.executemany(sql_campo, batch_campo)
         conn.commit()
@@ -294,6 +358,7 @@ def insert_players_from_dataframe(df_porteros, df_campo):
     batch_porteros = []
     
     for row in df_porteros.iter_rows(named=True):
+        # Resolvemos las claves foráneas usando la función auxiliar
         team_id, league_id = obtener_ids(row['EQUIPO'])
         
         if team_id:
@@ -307,6 +372,8 @@ def insert_players_from_dataframe(df_porteros, df_campo):
             ))
             
     print(f"PORTEROS: {len(batch_porteros)}")
+    
+    # Inserción masiva para los porteros
     if batch_porteros:
         cursor.executemany(sql_porteros, batch_porteros)
         conn.commit()
