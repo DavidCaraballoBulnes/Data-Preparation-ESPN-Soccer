@@ -1,0 +1,7 @@
+polars
+connectorx
+statsmodels
+pyarrow
+plotly
+requests
+matplotlib

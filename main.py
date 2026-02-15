@@ -289,26 +289,9 @@ df_goals_against_leagues = get_df_goals_against_leagues(df)
 
 # Gráficos de jugadores
 
-wings_players = ["Antony", "Vinícius Júnior", "Lamine Yamal", "Raphinha", "Nico Williams", "Marcus Rashford", "Mohamed Salah", "Rafael Leão", "Jérémy Doku", "Alejandro Garnacho", "Arnaut Danjuma"]
+wings_players = ["Vinícius Júnior", "Nico Williams", "Antony", "Lamine Yamal", "Raphinha", "Marcus Rashford", "Mohamed Salah", "Rafael Leão", "Jérémy Doku", "Alejandro Garnacho", "Arnaut Danjuma", "Thiago Almada", "Chidera Ejuke"]
 # Convertimos la lista en string SQL
 players_sql_wingers = ", ".join([f"'{player}'" for player in wings_players])
-
-query = f"""
-SELECT 
-    fp.name,
-    fp.games_played,
-    fp.goals,
-    fp.assists,
-    fp.fouls_received,
-    t.name AS team_name,
-    l.name_league
-FROM field_players fp
-INNER JOIN teams t ON fp.team_id = t.id
-INNER JOIN league l ON fp.league_id = l.id_league
-WHERE fp.name IN ({players_sql_wingers})
-"""
-
-df_players_wingers = pl.read_database_uri(query=query, uri=uri)
 
 query = f"""
 SELECT 
@@ -391,8 +374,9 @@ INNER JOIN league l ON gk.league_id = l.id_league
 
 df_goalkeepers = pl.read_database_uri(query=query_porteros, uri=uri)
 
-def get_df_goals_assist_wingers(df):
-    df_wingers = df.drop(["team_name", "games_played"])
+def get_df_goals_assist_wingers(df, wingers):
+    df_wingers = df.filter(pl.col("player_name").is_in(wingers))
+    df_wingers = df_wingers.drop(["team_name", "games_played"])
     df_wingers = (
     df_wingers.with_columns(
         (pl.col("goals") + pl.col("assists")).alias("total_contribution")
@@ -411,7 +395,7 @@ def get_df_goals_assist_wingers(df):
     # Barras apiladas
     fig.add_trace(
         go.Bar(
-            x=df_pd["name"],
+            x=df_pd["player_name"],
             y=df_pd["goals"],
             name="Goles"
         ),
@@ -420,7 +404,7 @@ def get_df_goals_assist_wingers(df):
 
     fig.add_trace(
         go.Bar(
-            x=df_pd["name"],
+            x=df_pd["player_name"],
             y=df_pd["assists"],
             name="Asistencias"
         ),
@@ -433,7 +417,7 @@ def get_df_goals_assist_wingers(df):
             x=df_pd["goals"],
             y=df_pd["assists"],
             mode="markers+text",
-            text=df_pd["name"],
+            text=df_pd["player_name"],
             textposition="top center",
             name="Jugador",
             marker=dict(
@@ -462,18 +446,19 @@ def get_df_goals_assist_wingers(df):
     fig.show()
     return df_wingers
 
-def get_df_fouls_received_per_game(df):
-    df_fouls_per_game = df.drop(["team_name", "name_league", "goals", "assists"])
-    df_fouls_per_game = df.with_columns(
+def get_df_fouls_received_per_game(df, wingers):
+    df_wingers = df.filter(pl.col("player_name").is_in(wingers))
+    df_wingers = df_wingers.drop(["team_name", "name_league", "goals", "assists"])
+    df_fouls_per_game = df_wingers.with_columns(
     (pl.col("fouls_received") / pl.col("games_played")).alias("fouls_per_game")
     )
 
     # Pintamos gráficos de barra para mostrar los resultados
     fig = px.bar(
         df_fouls_per_game.to_pandas(),
-        x="name",
+        x="player_name",
         y="fouls_per_game",
-        color="name",
+        color="player_name",
         color_continuous_scale="Reds",
         title="Faltas cometidas a los extremos por partido"
     )
@@ -610,7 +595,7 @@ def get_df_total_goals_by_nationality_map(df_players):
     df_total_country_goals.write_csv("data_output/Total_Goles_Nacionalidad.csv")
 
     # =========================================================================
-    # 🌍 MAPEO DE PAÍSES PARA PLOTLY (De Español a Código ISO Alpha-3)
+    # MAPEO DE PAÍSES PARA PLOTLY (De Español a Código ISO Alpha-3)
     # =========================================================================
     PAISES_ISO = {
         "España": "ESP", "Argentina": "ARG", "Brasil": "BRA", "Francia": "FRA",
@@ -672,9 +657,9 @@ def get_df_total_goals_by_nationality_map(df_players):
     return df_total_country_goals
 
 
-df_wingers = get_df_goals_assist_wingers(df_players_wingers)
+df_wingers = get_df_goals_assist_wingers(df_players, wings_players)
 
-df_fouls_wingers_per_game = get_df_fouls_received_per_game(df_players_wingers)
+df_fouls_wingers_per_game = get_df_fouls_received_per_game(df_players, wings_players)
 
 df_avg_team_ages = get_df_avg_team_ages(df_players, df_goalkeepers)
 
