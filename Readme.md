@@ -7,6 +7,8 @@ Actualmente, el sistema obtiene información actualizada sobre dos ligas de fút
 
 ✔ LaLiga (España)
 ✔ Premier League (Inglaterra)
+✔ Serie A (Italia)
+✔ Bundesliga (Alemania)
 
 Los datos se almacenan en una base de datos SQLite para su posterior análisis y visualización.
 
@@ -18,7 +20,7 @@ El proyecto consta de un proceso automatizado que:
 
 - Los almacena en una base de datos estructurada (soccer.db) para su posterior análisis.
 
-- Genera gráficas comparativas de goles a favor y en contra por liga (funcionalidad extra).
+- Generar distintos gráficos que comentaremos posteriormente para hacer un análisis de ello y sacar conclusiones.
 
 🎯 Objetivos del Proyecto
 
@@ -26,9 +28,7 @@ El proyecto consta de un proceso automatizado que:
 
 ▪ Diseñar una estructura de base de datos relacional para almacenar la información.
 
-▪ Implementar funciones de inserción y actualización de datos en SQLite.
-
-▪ Trabajar de forma colaborativa con control de versiones mediante GitHub.
+▪ Realizar gráficos y hacer un análisis donde sacemos conclusiones claras.
 
 🧩 Estructura del Proyecto
 
@@ -46,60 +46,67 @@ El script realiza una solicitud HTTP a la API de ESPN para obtener información 
 
 ligas_urls = {
     "LaLiga": "https://site.web.api.espn.com/apis/v2/sports/soccer/esp.1/standings",
-    "Premier League": "https://site.web.api.espn.com/apis/v2/sports/soccer/eng.1/standings"
+    "Premier League": "https://site.web.api.espn.com/apis/v2/sports/soccer/eng.1/standings",
+    "Serie A": "https://site.web.api.espn.com/apis/v2/sports/soccer/ita.1/standings",
+    "Bundesliga": "https://site.web.api.espn.com/apis/v2/sports/soccer/ger.1/standings"
 }
 
 Posteriormente:
 
 Extrae estadísticas relevantes (partidos jugados, victorias, derrotas, puntos, etc.).
 
-Estructura los datos en un diccionario.
-
 Inserta o actualiza la información en la base de datos mediante funciones del módulo db.py.
 
-Genera gráficas separadas para cada liga mostrando goles a favor y en contra por equipo.
-
 2. Gestión de la base de datos (db.py)
+   
+3. Una vez guardada la información en la base de datos, en otro script hacemos una consulta SQL para obtener los datos necesarios que utilizaremos para crear gráficas y hacer análisis
 
-El módulo db.py se encarga de:
+4. Con la función 'read_database_uri' incluimos la consulta y el url de nuestra base de datos SQLITE, de esta froma, obtendremos un dataframe de Polars con la información importante, haciedno asi una limpieza rápida y efectiva
 
-Crear las tablas (league, teams, stats).
+5. Luego, una vez tenemos el dataframe general, por cada gráfico que hagamos hacemos un '.drop' para reducir más el número de variables, ya que para hcer una gráfica u otra, necesitamos un número determinado de variables, por lo que vamos creando dataframes que nos servirá para realizar un análisis u otro
 
-Insertar nuevas ligas y equipos.
+6. Una vez tengamos el dataframe en cuestión, creamos la gráfica correspondiete para hacer el análisis
 
-Actualizar estadísticas de los equipos.
+📊 Gráficas y análisis
 
-Evitar duplicación de registros mediante verificaciones previas.
+- En primer lugar, vemos una gráfica donde podemos ver las victorias y los empates de cada liga
+  
+  <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/9c68af12-fb67-4ce1-bd72-fcd6b74eae89" />
 
-Las tablas tienen las siguientes estructuras:
+  Podemos ver que en la Serie A es donde más empates hay, mientras que en la Bundesliga es donde menos empates tiene. La Premier y LALIGA es un término medio, aunque la diferencia entre todas no es tan grande.
+  En cuanto a las victorias, la Bundesliga es donde más victorias hay (debido a que tienen menos empates), luego le sigue LALIGA.
+  De esto podemos decir que la Bundesliga tiene más partidos decisivos (menos empates), donde los partidos son más ofensivos, mientras que la Serie A los equipos, es posible que jueguen con un bloque defensivo     mayor. La liga en el que podemos decir que hay un equilibrio entre el bloque defensivo y ofensivo es en la Premier, ya que su porcentaje de victorias y empates son muy parejos
 
-==========================
-      Tabla: league
-==========================
-| id |   name   |  year  |
-|----|----------|--------|
-|  1 |  LaLiga  |  2024  |
-==========================
+- Luego, podemos ver una <a href="https://4drian04.github.io/Obtencion-Almacenamiento-Datos/">gráfica donde observamos la correlación entre los goles de diferencia y los puntos por partido de cada equipo de        cuatro ligas distintas</a>
 
+  <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/1cf59d8a-0e35-439e-853d-4c9429554ee5" />
 
-=================================================================
-						Tabla: teams
-=================================================================
-|	id	|		name		|		logo		| 	league_id	|
-|-------|-------------------|-------------------|---------------|
-|	1	|	Real Madrid	    |  	 https://...	|	    1		|
-=================================================================
+  En esta gráfica podemos ver que, cuanto mayor son los goles de diferencia, mayor son los puntos por partido, pero lo interesante de esta gráfica es mirar en ciertos sectores de la gráfica donde hay equipos que   tienen el mismo gol de diferencia pero hay algunos que tienen menos puntos por goles que otros. Un ejemplo que podemos ver en la gráfica es el Espanyol y el Elche, donde ambos tienen los mismos goles de          diferencia, pero el Espanyol tiene más puntos por partidos que el Elche, esto se pueden llamar casos "injustos", pero podemos deducir que existe la posibilidad de que el Elche ha perdido muchos partidos por un   gol de diferencia y en otros partidos ha metido muchos goles a favor, mientras que el Espanyol ha ganado muchos partidos por un gol de diferencia, y en otros pocos haya perdido por 2-3 goles en contra, de esta   forma ambos tienen los mismos goles de diferencia, pero el Espanyol más puntos por partidos
 
+- Por otro lado, podemos ver una <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/">gráfica donde se compara los goles a favor y en contra de cada equipo</a>
 
-==================================================================================================
-        								Tabla: stats
-==================================================================================================
-| id | team_id  | points | played | goals_against | goals_for | wins | draws | losses | position |
-|----|----------|--------|--------|---------------|-----------|------|-------|--------|----------|
-|  1 |    1     |   85   |   38   |       30      |     70    |  27  |   4   |    7   |     1    |
-==================================================================================================
+  <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/cfb11dff-49e3-4ff2-9971-81bb1c199123" />
 
+  La gráfica esta dividida en diferentes secciones, para ello he obtenido la media de los goles a favor y en contra y con esas medias he añadidos las líneas que separan en diferentes sectores. Podemos visualizar   los equipos que tienen mala/buena defensa y mal/buen ataque. Viendo las diferentes secciones, podemos ver que la liga que tiene mejores ataques es la Premier, donde diez equipos se encuentran en la parte de la   derecha (donde se encuentran los equipos con mejores ataques), luego le sigue la Bundesliga con 9 equipos, mientras que el equipo que tienen menos equipos en la sección de buenos ataques es la Serie A. Por       otro lado, las ligas con mejores defensas es LALIGA y la Serie A con 11 equipos en la parte inferior donde se encuentran los equipos con mejores defensas. La liga que peor defensa tiene según la gráfica es la    Bundesliga, donde tiene solo 7 equipos con buenos defensas, y 4 de ellos se encuentran muy cerca de la frontera, por lo que si la media cambia, podrían cambiar de sección
 
+- Por otra parte, podemos observar esta gráfica, que nos muestra el promedio de goles en contra por liga
+
+  <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/fe498ef7-3727-459d-a6a5-c00011f6ba09" />
+
+  Podemos observar que, donde más goles encajados hay es en la Bundesliga, superando por mucho el promedio total de los goles encajados de las 4 ligas estudiadas. Esto nos hace ver que lo analizado anteriormente   (Bundesliga peores defensas y menos empates) tenga sentido, ya que tiene más goles encajados. Por otro lado, la liga que menos goles encajados tiene es la Serie A, que relacionado con gráficas anteriores         podemos concluir que tiene sentido, ya que es la liga que más empates hay y menos equipos tienen buen ataque. En cuanto a LALIGA y la Premier League, podemos ver que siguen un equilibro, aunque la Premier        supera por poco la media global de goles encajados
+
+- Luego pasamos a los datos de los jugadores, en este caso vemos los goles y asistencias de los mejores extremos del mundo
+
+  <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/01265a48-8a76-4d41-8551-485051450405" />
+
+  Vemos en un gráfico apilado tanto los goles, como las asistencias de los extremos del mundo, donde en primer lugar está Lamine Yamal, luego le sigue don Vinicius Junior y en tercer lugar Raphinha. A la derecha   podemos observar un gráfico Scatter, pero con los mismos datos, en el que cuanto más alto estes más asistencias tiene, y cuanto más a la derecha en el eje X más goles
+
+- Además, otro gráfico interesante que mirar acerca de los extremos son las faltas recibidas por partidos
+
+  <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/5fbe9d89-6e90-425d-bb3c-43a958fe56bc" />
+
+  Siendo extremo, los goles no son lo más importante, eso es trabajo del delantero centro, lo más importante jugando en esa posición son las asistencias y las faltas recibidas por partido, ya que eso quiere        decir que el extremo encara mucho, quizas sea un jugador rápido o rápido en conducción, por lo que es díficil de parar, a no ser que sea con faltas, de esta forma, se genera una ventaja al equipo que recibe la   falta. En este caso vemos que, don Vinicius Junior es el que más faltas recibe de todos los extremos analizados, siguiendole Lamine Yamal
+  
 🧠 Tecnologías Utilizadas
 
 + Python 3
@@ -113,7 +120,10 @@ Las tablas tienen las siguientes estructuras:
 + Matplotlib (para generar gráficas)
 
 + GitHub (para control de versiones y trabajo colaborativo)
-
+  
++ Polars (nos permite guardar la información en DataFrames y generar gráficos)
+  
++ Plotly (generar gráficas interactivas)
 
 🚀 Ejecución del Proyecto
 
@@ -128,33 +138,25 @@ pip install requests matplotlib
 
 3. Ejecutar el script principal
 
-python main.py
-
-
-Esto creará (si no existe) la base de datos soccer.db y almacenará los datos obtenidos desde la API.
-
-
-📊 Funcionalidades Extra
-
-- Generación de gráficas por liga (goles a favor y en contra).
-
-- Soporte para múltiples ligas (actualmente LaLiga y Premier League).
-
-
-📈 Posibles Ampliaciones
-
-+ Agregar más fuentes de datos:
-
-	- Otras ligas (liga alemana, argentina, etc.)
-
-+ Automatizar la actualización periódica mediante tareas programadas.
-
-+ Ampliar el modelo de datos para incluir jugadores y estadísticas individuales.
-
-+ Permitir el histórico de datos para mantener los datos de años y temporadas anteriores.
-
-
+   python main.py
+   
 👥 Autores
 
 
-Proyecto desarrollado por Adrián García García, David Caraballo Bulnes, Pablo Baeza Gómez, Eva María García Gálvez.
+Proyecto desarrollado por Adrián García García, David Caraballo Bulnes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
