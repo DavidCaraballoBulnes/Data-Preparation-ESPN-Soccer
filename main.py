@@ -238,9 +238,9 @@ def get_df_goals_against_leagues(df):
     fig.show()
     return df_goals_against_liga
 
-def show_avg_league_goals(df):
+def get_df_avg_league_match_goals(df):
     """
-    Docstring para show_avg_league_goals
+    Docstring para get_df_avg_league_match_goals
 
     Método para mostrar gráficamente la media de los goles por partido por cada liga.
     
@@ -250,15 +250,15 @@ def show_avg_league_goals(df):
     avg_league_matches_goals = df_goals_league.group_by("name_league").mean()
     avg_league_goals = avg_league_matches_goals.with_columns((pl.col("goals_against") / pl.col("played")).alias("avg_league_goals"))
 
-    avg_league_goals.write_csv("data_output/Media_Goles_Ligas.csv")
+    avg_league_goals.write_csv("data_output/Media_Goles_Partido_Ligas.csv")
 
-    fig = px.pie(avg_league_goals, values='avg_league_goals', names='name_league', title='Media de goles por liga')
+    fig = px.pie(avg_league_goals, values='avg_league_goals', names='name_league', title='Media de goles por partido de cada liga')
     fig.show()
     return avg_league_goals
 
-def show_avg_league_match_pts(df):
+def get_df_avg_league_match_pts(df):
     """
-    Docstring para show_avg_league_match_pts
+    Docstring para get_df_avg_league_match_pts
 
     Método para mostrar gráficamente la media de puntos que se consiguen por partido en cada liga.
 
@@ -274,9 +274,9 @@ def show_avg_league_match_pts(df):
     fig.show()
     return avg_league_matches_pts
 
-df_avg_league_goals = show_avg_league_goals(df)
+df_avg_league_goals = get_df_avg_league_match_goals(df)
 
-df_avg_league_match_pts = show_avg_league_match_pts(df)
+df_avg_league_match_pts = get_df_avg_league_match_pts(df)
 
 df_ve_ligue = get_df_victory_draw_for_league(df)
 
@@ -391,7 +391,7 @@ INNER JOIN league l ON gk.league_id = l.id_league
 
 df_goalkeepers = pl.read_database_uri(query=query_porteros, uri=uri)
 
-def get_goals_assist_wingers(df):
+def get_df_goals_assist_wingers(df):
     df_wingers = df.drop(["team_name", "games_played"])
     df_wingers = (
     df_wingers.with_columns(
@@ -462,7 +462,7 @@ def get_goals_assist_wingers(df):
     fig.show()
     return df_wingers
 
-def get_fouls_received_per_game(df):
+def get_df_fouls_received_per_game(df):
     df_fouls_per_game = df.drop(["team_name", "name_league", "goals", "assists"])
     df_fouls_per_game = df.with_columns(
     (pl.col("fouls_received") / pl.col("games_played")).alias("fouls_per_game")
@@ -481,7 +481,7 @@ def get_fouls_received_per_game(df):
     fig.show()
     return df_fouls_per_game
 
-def show_avg_team_ages(df_players, df_goalkeepers):
+def get_df_avg_team_ages(df_players, df_goalkeepers):
     """
     Calcula y grafica la edad media de cada equipo utilizando un gráfico 
     de puntos (Cleveland Dot Plot). 
@@ -581,7 +581,7 @@ def show_avg_team_ages(df_players, df_goalkeepers):
     # Retornamos el DataFrame procesado por si se requiere en otras funciones
     return df_avg_team_ages
 
-def show_total_goals_by_nationality_map(df_players):
+def get_df_total_goals_by_nationality_map(df_players):
     """
     Calcula la SUMA TOTAL de goles por nacionalidad y lo representa 
     en un mapa geográfico interactivo (Choropleth).
@@ -672,10 +672,10 @@ def show_total_goals_by_nationality_map(df_players):
     return df_total_country_goals
 
 
-df_wingers = get_goals_assist_wingers(df_players_wingers)
+df_wingers = get_df_goals_assist_wingers(df_players_wingers)
 
-df_fouls_wingers_per_game = get_fouls_received_per_game(df_players_wingers)
+df_fouls_wingers_per_game = get_df_fouls_received_per_game(df_players_wingers)
 
-df_avg_team_ages = show_avg_team_ages(df_players, df_goalkeepers)
+df_avg_team_ages = get_df_avg_team_ages(df_players, df_goalkeepers)
 
-df_total_goals_nationality = show_total_goals_by_nationality_map(df_players)
+df_total_goals_nationality = get_df_total_goals_by_nationality_map(df_players)
