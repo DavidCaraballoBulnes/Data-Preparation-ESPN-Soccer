@@ -94,6 +94,18 @@ Inserta o actualiza la información en la base de datos mediante funciones del m
   <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/fe498ef7-3727-459d-a6a5-c00011f6ba09" />
 
   Podemos observar que, donde más goles encajados hay es en la Bundesliga, superando por mucho el promedio total de los goles encajados de las 4 ligas estudiadas. Esto nos hace ver que lo analizado anteriormente   (Bundesliga peores defensas y menos empates) tenga sentido, ya que tiene más goles encajados. Por otro lado, la liga que menos goles encajados tiene es la Serie A, que relacionado con gráficas anteriores         podemos concluir que tiene sentido, ya que es la liga que más empates hay y menos equipos tienen buen ataque. En cuanto a LALIGA y la Premier League, podemos ver que siguen un equilibro, aunque la Premier        supera por poco la media global de goles encajados
+
+- Luego pasamos a los datos de los jugadores, en este caso vemos los goles y asistencias de los mejores extremos del mundo
+
+  <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/01265a48-8a76-4d41-8551-485051450405" />
+
+  Vemos en un gráfico apilado tanto los goles, como las asistencias de los extremos del mundo, donde en primer lugar está Lamine Yamal, luego le sigue don Vinicius Junior y en tercer lugar Raphinha. A la derecha   podemos observar un gráfico Scatter, pero con los mismos datos, en el que cuanto más alto estes más asistencias tiene, y cuanto más a la derecha en el eje X más goles
+
+- Además, otro gráfico interesante que mirar acerca de los extremos son las faltas recibidas por partidos
+
+  <img width="1520" height="781" alt="newplot" src="https://github.com/user-attachments/assets/5fbe9d89-6e90-425d-bb3c-43a958fe56bc" />
+
+  Siendo extremo, los goles no son lo más importante, eso es trabajo del delantero centro, lo más importante siendo extremo son las asistencias y las faltas recibidas por partido, ya que eso quiere decir que el    extremo encara mucho y es díficil de parar a no ser que sea con faltas, generando una ventaja al equipo que recibe la falta. En este caso vemos que, don Vinicius Junior es el que más faltas recibe de todos los   extremos analizados, siguiendole Lamine Yamal
   
 🧠 Tecnologías Utilizadas
 
@@ -131,6 +143,7 @@ python mainV2.py
 
 
 Proyecto desarrollado por Adrián García García, David Caraballo Bulnes.
+
 
 
 
