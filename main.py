@@ -646,9 +646,9 @@ def get_df_avg_team_ages(df_players, df_goalkeepers):
     # Retornamos el DataFrame procesado por si se requiere en otras funciones
     return df_avg_team_ages
 
-def get_df_total_goals_by_nationality_map(df_players):
+def get_df_avg_goals_by_nationality_map(df_players):
     """
-    Calcula la SUMA TOTAL de goles por nacionalidad y lo representa 
+    Calcula la MEDIA de goles por nacionalidad y lo representa 
     en un mapa geográfico interactivo (Choropleth).
     """
     
@@ -659,20 +659,21 @@ def get_df_total_goals_by_nationality_map(df_players):
         .with_columns(pl.col("goals").fill_null(0))
     )
     
-    # 2. Agrupación y Suma de goles (en lugar de media)
-    df_total_country_goals = df_team_country_goals.group_by("nationality").agg(
+    # 2. Agrupación y Media de goles
+    df_avg_country_goals = df_team_country_goals.group_by("nationality").agg(
+        pl.col("goals").mean().alias("avg_goals"),                 # Media de goles
         pl.col("goals").sum().alias("total_goals"),                 # Suma de goles
         pl.col("player_name").count().alias("player_count")         # Conteo de jugadores
     )
     
     # 3. Filtramos países que tengan al menos 1 gol para limpiar el mapa
-    df_total_country_goals = (
-        df_total_country_goals
+    df_avg_country_goals = (
+        df_avg_country_goals
         .filter(pl.col("total_goals") > 0)
-        .sort("total_goals", descending=True)
+        .sort("avg_goals", descending=True)
     )
 
-    df_total_country_goals.write_csv(DIRECTORIO_CSV+"/Total_Goles_Nacionalidad.csv")
+    df_avg_country_goals.write_csv(DIRECTORIO_CSV+"/Media_Goles_Nacionalidad.csv")
 
     # =========================================================================
     # MAPEO DE PAÍSES PARA PLOTLY (De Español a Código ISO Alpha-3)
@@ -696,7 +697,7 @@ def get_df_total_goals_by_nationality_map(df_players):
     }
 
     # Convertimos a Pandas para graficar y aplicamos el mapeo
-    df_pandas = df_total_country_goals.to_pandas()
+    df_pandas = df_avg_country_goals.to_pandas()
     
     # Creamos una nueva columna con el código ISO. Si el país no está en el dicc, lo deja tal cual.
     df_pandas['iso_alpha'] = df_pandas['nationality'].map(PAISES_ISO).fillna(df_pandas['nationality'])
@@ -705,16 +706,18 @@ def get_df_total_goals_by_nationality_map(df_players):
     fig = px.choropleth(
         df_pandas,
         locations="iso_alpha",          # Usamos los códigos ISO (ej: "ESP", "ARG")
-        color="total_goals",            # La intensidad del color depende de los goles
+        color="avg_goals",            # La intensidad del color depende de los goles
         hover_name="nationality",       # Al pasar el ratón, queremos leer "España", no "ESP"
         hover_data={
             "iso_alpha": False,         # Ocultamos el código ISO en el recuadro flotante
-            "player_count": True, 
-            "total_goals": True
+            "player_count": True,
+            "total_goals": True, 
+            "avg_goals": True
         },
-        title="Suma Total de Goles por Nacionalidad",
+        title="Media de Goles por Nacionalidad",
         labels={
-            "total_goals": "Goles Totales",
+            "avg_goals": "Media de Goles",
+            "total_goals": "Total de Goles",
             "player_count": "Nº Jugadores",
             "nationality": "País"
         },
@@ -733,9 +736,9 @@ def get_df_total_goals_by_nationality_map(df_players):
         )
     )
     
-    fig.write_html(DIRECTORIO_GRAFICOS+"/Total_Goles_Nacionalidad.html")
+    fig.write_html(DIRECTORIO_GRAFICOS+"/Media_Goles_Nacionalidad.html")
     fig.show()
-    return df_total_country_goals
+    return df_avg_country_goals
 
 # =========================================================================
 # EJECUCIÓN: ANÁLISIS ESPECÍFICO DE JUGADORES
@@ -747,4 +750,4 @@ df_fouls_wingers_per_game = get_df_fouls_received_per_game(df_players, wings_pla
 
 df_avg_team_ages = get_df_avg_team_ages(df_players, df_goalkeepers)
 
-df_total_goals_nationality = get_df_total_goals_by_nationality_map(df_players)
+df_total_goals_nationality = get_df_avg_goals_by_nationality_map(df_players)
