@@ -642,9 +642,14 @@ def get_df_avg_team_ages(df_players, df_goalkeepers):
     # Renderizar el gráfico
     fig.write_html(DIRECTORIO_GRAFICOS+"/Media_Edades_Equipos.html")
     fig.show()
+    show_avg_team_ages_boxplot(df_team_ages)
     
     # Retornamos el DataFrame procesado por si se requiere en otras funciones
     return df_avg_team_ages
+
+def show_avg_team_ages_boxplot(df_avg_team_ages):
+    fig = px.box(df_avg_team_ages, x="team_name", y="age")
+    fig.show()
 
 def get_df_avg_goals_by_nationality_map(df_players):
     """
