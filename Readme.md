@@ -124,7 +124,7 @@ Obtencion-Almacenamiento-Datos/
 
 -  Otra forma de representar los datos anteriores, es mediante <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Boxplot_Edades_Equipos.html">boxplot</a>
 
-  <img width="1904" height="939" alt="newplot" src="https://github.com/user-attachments/assets/776121fc-6f0b-4dea-824d-c548cfc3dd67" />
+    <img width="1904" height="939" alt="newplot" src="https://github.com/user-attachments/assets/776121fc-6f0b-4dea-824d-c548cfc3dd67" />
 
     Este gráfico nos ayuda a ver la representación de las edades de cada plantilla mediante cajas con bigotes. Gracias a ello, podemos ver, que en algunas ocasiones la media de los equipos aumenta debido a diversos outliers. Por ejemplo, en el Manchester United, hay un outlier (un jugador de 39 años) que hace que aumente la media de edad.
     
@@ -169,6 +169,7 @@ Sigue estos pasos para replicar el proyecto en tu entorno local:
 Desarrollado con 💻 y ⚽ por:
 * **Adrián García García** - [GitHub](https://github.com/4drian04) | [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-garc%C3%ADa-garc%C3%ADa-6ab399333/)
 * **David Caraballo Bulnes** - [GitHub](https://github.com/DavidCaraballoBulnes) | [LinkedIn](https://www.linkedin.com/in/david-caraballo-bulnes-791968239/)
+
 
 
 
