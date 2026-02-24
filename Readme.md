@@ -120,8 +120,14 @@ Obtencion-Almacenamiento-Datos/
 
       <img width="1262" height="900" alt="Media_Edades_Equipos" src="https://github.com/user-attachments/assets/6266c267-a007-4049-a1fb-4f1d5e630fd7" />
 
-      Podemos ver que el Chelsea tiene una media de edad de aproximadamente 22 años. Eso indica que dicho equipo tendrá asegurada la plantilla durante mínimo una década. Por otro lado, tenemos equipos como el Rayo Vallecano y el SC Freiburg, cuya media es de 27 años aproximadamente. Éstos deberán renovar la plantilla de manera más inmediata. 
+      Podemos ver que el Chelsea tiene una media de edad de aproximadamente 22 años. Eso indica que dicho equipo tendrá asegurada la plantilla durante mínimo una década. Por otro lado, tenemos equipos como el Rayo Vallecano y el SC Freiburg, cuya media es de 27 años aproximadamente. Éstos deberán renovar la plantilla de manera más inmediata.
 
+-  Otra forma de representar los datos anteriores, es mediante <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Boxplot_Edades_Equipos.html">boxplot</a>
+
+  <img width="1904" height="939" alt="newplot" src="https://github.com/user-attachments/assets/776121fc-6f0b-4dea-824d-c548cfc3dd67" />
+
+    Este gráfico nos ayuda a ver la representación de las edades de cada plantilla mediante cajas con bigotes. Gracias a ello, podemos ver, que en algunas ocasiones la media de los equipos aumenta debido a diversos outliers. Por ejemplo, en el Manchester United, hay un outlier (un jugador de 39 años) que hace que aumente la media de edad.
+    
 -  Por último, tenemos un mapa geográfico representando los <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Total_Goles_Nacionalidad.html">goles que han marcado los jugadores según su nacionalidad</a>
 
     <img width="1904" height="939" alt="newplot" src="https://github.com/user-attachments/assets/0af4b27e-196f-4bcd-9958-d43f9091c224" />
@@ -163,6 +169,7 @@ Sigue estos pasos para replicar el proyecto en tu entorno local:
 Desarrollado con 💻 y ⚽ por:
 * **Adrián García García** - [GitHub](https://github.com/4drian04) | [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-garc%C3%ADa-garc%C3%ADa-6ab399333/)
 * **David Caraballo Bulnes** - [GitHub](https://github.com/DavidCaraballoBulnes) | [LinkedIn](https://www.linkedin.com/in/david-caraballo-bulnes-791968239/)
+
 
 
 
