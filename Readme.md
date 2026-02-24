@@ -124,7 +124,7 @@ Obtencion-Almacenamiento-Datos/
 
 -  Por último, tenemos un mapa geográfico representando los <a href="https://davidcaraballobulnes.github.io/Data-Preparation-ESPN-Soccer/graficos/Total_Goles_Nacionalidad.html">goles que han marcado los jugadores según su nacionalidad</a>
 
-    <img width="2544" height="1255" alt="Total_Goles_Nacionalidad" src="https://github.com/user-attachments/assets/2e7dcf1b-02dd-403f-8eff-ab15487be6c2" />
+    <img width="1904" height="939" alt="newplot" src="https://github.com/user-attachments/assets/0af4b27e-196f-4bcd-9958-d43f9091c224" />
 
     De este gráfico podemos observar que el país ganador es España con una clara diferencia, superando los 300 goles. Esto se debe, en su mayor parte, a la cantidad de jugadores de cada nacionalidad, teniendo éste  más de 400. También, destacan países como Alemania, Inglaterra y Francia, que, pese a tener la mitad de jugadores, han estado cerca. Mientras que España tiene 100 goles menos que jugadores activos, Francia y Alemania están en el caso contrario, demostrando que la calidad es mejor que la cantidad.
 
@@ -163,4 +163,5 @@ Sigue estos pasos para replicar el proyecto en tu entorno local:
 Desarrollado con 💻 y ⚽ por:
 * **Adrián García García** - [GitHub](https://github.com/4drian04) | [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-garc%C3%ADa-garc%C3%ADa-6ab399333/)
 * **David Caraballo Bulnes** - [GitHub](https://github.com/DavidCaraballoBulnes) | [LinkedIn](https://www.linkedin.com/in/david-caraballo-bulnes-791968239/)
+
 
