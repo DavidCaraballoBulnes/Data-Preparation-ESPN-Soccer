@@ -572,10 +572,10 @@ def get_df_avg_team_ages(df_players, df_goalkeepers):
 
     # 3. AGREGACIÓN Y CÁLCULO
     # Agrupamos por equipo y calculamos la media aritmética de la columna 'age'.
-    df_avg_team_ages = df_team_ages["avg_age"] = df_team_ages.group_by("team_name").agg(
-        pl.col("age").mean().alias("avg_age")
+    df_avg_team_ages = df_team_ages.with_columns(
+        pl.col("age").mean().over("team_name").alias("avg_age")
     )
-
+    
     # 4. ORDENACIÓN
     # Ordenar los datos de menor a mayor es crucial en un Dot Plot para crear 
     # un efecto de "escalera" visual y facilitar el ranking de equipos.
