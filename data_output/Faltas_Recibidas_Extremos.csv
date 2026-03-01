@@ -1,14 +1,14 @@
 player_id,player_name,dorsal,position,age,nationality,height,weight,games_played,starts,subs,shots_on_target,fouls_committed,fouls_received,yellow_cards,red_cards,player_team_id,player_league_id,team_id,team_logo,team_league_id,id_league,league_year,fouls_per_game
-58,Nico Williams,10,A,23,España,1.8,67,19,37,4,13,17,23,1,0,10,1,10,https://a.espncdn.com/i/teamlogos/soccer/500/93.png,1,1,2025-2026,1.2105263157894737
-83,Thiago Almada,11,M,24,Argentina,1.7,63,16,15,8,9,4,9,1,0,3,1,3,https://a.espncdn.com/i/teamlogos/soccer/500/1068.png,1,1,2025-2026,0.5625
-121,Lamine Yamal,10,A,18,España,1.78,72,19,80,1,28,16,38,0,0,1,1,1,https://a.espncdn.com/i/teamlogos/soccer/500/83.png,1,1,2025-2026,2.0
-122,Raphinha,11,A,29,Brasil,1.75,72,14,40,2,11,7,7,2,0,1,1,1,https://a.espncdn.com/i/teamlogos/soccer/500/83.png,1,1,2025-2026,0.5
-123,Marcus Rashford,14,A,28,Inglaterra,1.88,78,21,63,8,21,5,17,2,0,1,1,1,https://a.espncdn.com/i/teamlogos/soccer/500/83.png,1,1,2025-2026,0.8095238095238095
-410,Antony,7,A,25,Brasil,1.75,63,19,54,0,24,11,27,1,1,5,1,5,https://a.espncdn.com/i/teamlogos/soccer/500/244.png,1,1,2025-2026,1.4210526315789473
-447,Vinícius Júnior,7,A,25,Brasil,1.75,73,23,63,3,27,22,48,5,0,2,1,2,https://a.espncdn.com/i/teamlogos/soccer/500/86.png,1,1,2025-2026,2.0869565217391304
-543,Chidera Ejuke,21,A,28,Nigeria,1.75,72,17,13,13,1,1,9,0,0,13,1,13,https://a.espncdn.com/i/teamlogos/soccer/500/243.png,1,1,2025-2026,0.5294117647058824
-569,Arnaut Danjuma,7,A,29,Holanda,1.78,73,22,31,5,12,16,21,0,0,17,1,17,https://a.espncdn.com/i/teamlogos/soccer/500/94.png,1,1,2025-2026,0.9545454545454546
+57,Nico Williams,10,A,23,España,1.8,67,19,37,4,13,17,23,1,0,10,1,10,https://a.espncdn.com/i/teamlogos/soccer/500/93.png,1,1,2025-2026,1.2105263157894737
+82,Thiago Almada,11,M,24,Argentina,1.7,63,18,17,9,10,4,12,1,0,3,1,3,https://a.espncdn.com/i/teamlogos/soccer/500/1068.png,1,1,2025-2026,0.6666666666666666
+120,Lamine Yamal,10,A,18,España,1.78,72,22,96,1,33,21,44,0,0,1,1,1,https://a.espncdn.com/i/teamlogos/soccer/500/83.png,1,1,2025-2026,2.0
+121,Raphinha,11,A,29,Brasil,1.75,72,17,50,2,14,8,9,3,0,1,1,1,https://a.espncdn.com/i/teamlogos/soccer/500/83.png,1,1,2025-2026,0.5294117647058824
+122,Marcus Rashford,14,A,28,Inglaterra,1.88,78,22,64,9,21,5,18,2,0,1,1,1,https://a.espncdn.com/i/teamlogos/soccer/500/83.png,1,1,2025-2026,0.8181818181818182
+409,Antony,7,A,26,Brasil,1.75,63,20,60,0,25,11,29,1,1,5,1,5,https://a.espncdn.com/i/teamlogos/soccer/500/244.png,1,1,2025-2026,1.45
+446,Vinícius Júnior,7,A,25,Brasil,1.75,73,24,68,3,29,24,53,6,0,2,1,2,https://a.espncdn.com/i/teamlogos/soccer/500/86.png,1,1,2025-2026,2.2083333333333335
+542,Chidera Ejuke,21,A,28,Nigeria,1.75,72,18,14,14,1,1,9,0,0,13,1,13,https://a.espncdn.com/i/teamlogos/soccer/500/243.png,1,1,2025-2026,0.5
+569,Arnaut Danjuma,7,A,29,Holanda,1.78,73,23,32,6,13,18,22,0,0,17,1,17,https://a.espncdn.com/i/teamlogos/soccer/500/94.png,1,1,2025-2026,0.9565217391304348
 808,Alejandro Garnacho,49,A,21,Argentina,1.8,73,16,22,4,5,8,16,1,0,25,2,25,https://a.espncdn.com/i/teamlogos/soccer/500/363.png,2,2,2025-2026,1.0
-941,Mohamed Salah,11,A,33,Egipto,1.75,71,18,49,2,13,9,15,1,0,26,2,26,https://a.espncdn.com/i/teamlogos/soccer/500/364.png,2,2,2025-2026,0.8333333333333334
+941,Mohamed Salah,11,A,33,Egipto,1.75,71,20,52,2,13,9,15,1,0,26,2,26,https://a.espncdn.com/i/teamlogos/soccer/500/364.png,2,2,2025-2026,0.75
 975,Jérémy Doku,11,A,23,Bélgica,1.73,66,20,20,7,8,17,36,0,0,22,2,22,https://a.espncdn.com/i/teamlogos/soccer/500/382.png,2,2,2025-2026,1.8
-1191,Rafael Leão,10,A,26,Portugal,1.88,81,17,33,4,16,14,22,1,0,42,3,42,https://a.espncdn.com/i/teamlogos/soccer/500/103.png,3,3,2025-2026,1.2941176470588236
+1193,Rafael Leão,10,A,26,Portugal,1.88,81,19,39,4,19,16,27,3,0,42,3,42,https://a.espncdn.com/i/teamlogos/soccer/500/103.png,3,3,2025-2026,1.4210526315789473
