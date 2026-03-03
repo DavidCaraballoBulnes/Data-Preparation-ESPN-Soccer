@@ -137,17 +137,26 @@ Obtencion-Almacenamiento-Datos/
 ## Análisis con Tableau
 
 - Dashboards
+  
 
   <img width="1920" height="981" alt="Dashboard_Tableau_Equipos" src="https://github.com/user-attachments/assets/b5e52a20-c466-4933-a447-a80790c1f465" />
+  
+
+  ---
+  
 
   <img width="1920" height="1008" alt="Dashboard_Tableau" src="https://github.com/user-attachments/assets/bab1667b-dedd-435f-af9c-223d26c1cb98" />
+  
 
 - Historias
   
-    <img width="1920" height="868" alt="Historia_Medias_Edades" src="https://github.com/user-attachments/assets/c57da60c-9156-4ba3-94ae-a13a3318f170" />
+  
+  <img width="1585" height="868" alt="Historia_Medias_Edades" src="https://github.com/user-attachments/assets/a6d16453-b217-4259-bb62-59703afe4e88" />
 
-    <img width="1605" height="862" alt="Historia_Medias_Goles_Nacionalidades" src="https://github.com/user-attachments/assets/3e67d3ce-89ed-4964-96b8-49c85cbebeda" />
-
+  ---
+  
+  
+  <img width="1605" height="862" alt="Historia_Medias_Goles_Nacionalidades" src="https://github.com/user-attachments/assets/3e67d3ce-89ed-4964-96b8-49c85cbebeda" />
 
 ---
 
@@ -184,6 +193,7 @@ Sigue estos pasos para replicar el proyecto en tu entorno local:
 Desarrollado con 💻 y ⚽ por:
 * **Adrián García García** - [GitHub](https://github.com/4drian04) | [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-garc%C3%ADa-garc%C3%ADa-6ab399333/)
 * **David Caraballo Bulnes** - [GitHub](https://github.com/DavidCaraballoBulnes) | [LinkedIn](https://www.linkedin.com/in/david-caraballo-bulnes-791968239/)
+
 
 
 
