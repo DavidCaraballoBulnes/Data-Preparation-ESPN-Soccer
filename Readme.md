@@ -160,7 +160,7 @@ Obtencion-Almacenamiento-Datos/
    
   <img width="1913" height="967" alt="gd" src="https://github.com/user-attachments/assets/73373e66-b495-43e9-8426-9f33ce7be578" />
 
-  En esta gráfica podemos ver los goles y diferencia de cada equipo por partido de las ligas comentadas anteriormente, podemos observar que el equipo que más goles de diferencia tiene con bastante diferencia del segundo es el Bayern de Munich con 2.783 goles de diferencia por partido. Luego podemos ver que le sigue el Barcelona con 1.68 goles de diferencia por partido.
+  En esta gráfica podemos ver los goles de diferencia de cada equipo por partido de las ligas que se han analizado anteriormente con Plotly, podemos observar que el equipo que más goles de diferencia tiene, con bastante diferencia con respecto al segundo, es el Bayern de Munich con 2.783 goles de diferencia por partido. Luego podemos ver que le sigue el Barcelona con 1.68 goles de diferencia por partido.
 
  - Luego, podemos ver un gráfico de goles y asistencia de los extremos
 
@@ -172,7 +172,7 @@ Obtencion-Almacenamiento-Datos/
 
     <img width="1737" height="342" alt="image" src="https://github.com/user-attachments/assets/12af5a2a-cfab-404c-930e-aef70b01fe05" />
 
-    Esta otra gráfica es bastante parecida a otra anterior hecha con Plotly pero en lugar de barras verticales, son barras horizontales. Como comentamos anteriormente, siendo extremo, el trabajo es crear juego, los goles es cosa del delantero centro, por lo que una métrica interesante de analizar de los extremos son las faltas recibidas por partido (ya que con las faltas se crea juego a balón parado). Vemos que el extremo que más falta recibe es Vinicius Junior, siguiendole Lamine Yamal. Podemos concluir que estos dos extremos son los más determinantes de las cuatro grandes ligas.
+    Esta gráfica es bastante parecida a otra anterior hecha con Plotly pero en lugar de barras verticales, son barras horizontales. Como comentamos en el análisis hecho con Plotly, siendo un jugador extremo, el trabajo es crear juego, los goles es cosa del delantero centro, por lo que una métrica interesante de analizar son las faltas recibidas por partido (ya que con las faltas se crea juego a balón parado). Vemos que el extremo que más falta recibe por partido es Vinicius Junior, siguiendole Lamine Yamal. Podemos concluir que estos dos extremos son los más determinantes de las cuatro grandes ligas.
 
   - Por último, podemos ver una tabla resumen de los extremos
 
@@ -235,6 +235,7 @@ Sigue estos pasos para replicar el proyecto en tu entorno local:
 Desarrollado con 💻 y ⚽ por:
 * **Adrián García García** - [GitHub](https://github.com/4drian04) | [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-garc%C3%ADa-garc%C3%ADa-6ab399333/)
 * **David Caraballo Bulnes** - [GitHub](https://github.com/DavidCaraballoBulnes) | [LinkedIn](https://www.linkedin.com/in/david-caraballo-bulnes-791968239/)
+
 
 
 
