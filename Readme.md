@@ -134,7 +134,7 @@ Obtencion-Almacenamiento-Datos/
 
     En primer lugar, si nos fijamos en los goles totales, podemos observar que el país ganador es España con una clara diferencia, superando los 300 goles. Esto se debe, en su mayor parte, a la cantidad de jugadores de cada nacionalidad, teniendo éste  más de 400. También, destacan países como Alemania, Inglaterra y Francia, que, pese a tener la mitad de jugadores, han estado cerca. Sin embargo, si nos fijamos en la media de goles por número de jugadores, podemos ver que Canadá y Bosnia y Herzegovina tienen una gran media con respecto a los otros países.
 
-## Análisis con Tableau
+## 📊 Análisis con Tableau
 
 - Conexión con CSV
 
@@ -235,6 +235,7 @@ Sigue estos pasos para replicar el proyecto en tu entorno local:
 Desarrollado con 💻 y ⚽ por:
 * **Adrián García García** - [GitHub](https://github.com/4drian04) | [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-garc%C3%ADa-garc%C3%ADa-6ab399333/)
 * **David Caraballo Bulnes** - [GitHub](https://github.com/DavidCaraballoBulnes) | [LinkedIn](https://www.linkedin.com/in/david-caraballo-bulnes-791968239/)
+
 
 
 
