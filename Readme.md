@@ -138,13 +138,15 @@ Obtencion-Almacenamiento-Datos/
 
 - Conexión con CSV
 
-  Para el análisis en Tableau, hemos usado los CSVs que se generan al ejecutar el arhcivo "main.py", creando una nueva fuente de datos en Tableau por cada CSV. Sin embargo, hay un caso particular en los CSVs de los extremos, donde se ha hecho una relación entre ambos CSV por el id del jugador ("Goles_Asistencias_Extremos.csv" y "Faltas_Recibidas_Extremos.csv"). En todos los CSV donde habia números decimales con puntos, hemos tenido que crear un campo nuevo con la función "FLOAT()" para parsearlo a decimal. También se han hecho algunos cálculos como "Goal Diff Per Game" donde se ha dividido los goles de diferencias con los partidos jugados de cada equipo, obteniendo así el nuevo campo, e incluso hemos realizado campos más complejos como calcular, dependiendo de la media de goles recibidos y encajados y la media del equipo correspondiente, si un equipo tiene buena/mala defensa y buen/mal ataque. Este sería el código correspondiente para calcular dicho campo:
+  Para el análisis en Tableau, hemos usado los CSVs que se generan al ejecutar el arhcivo "main.py", creando una nueva fuente de datos en Tableau por cada CSV. Sin embargo, hay un caso particular en los CSVs de los extremos, donde se ha hecho una relación entre ambos CSV por el id del jugador ("Goles_Asistencias_Extremos.csv" y "Faltas_Recibidas_Extremos.csv"). En todos los CSV donde habia números decimales con puntos, hemos tenido que crear un campo nuevo con la función "FLOAT()" para parsearlo a decimal.
+
+  También se han hecho algunos cálculos como "Goal Diff Per Game" donde se ha dividido los goles de diferencias con los partidos jugados de cada equipo, obteniendo así el nuevo campo, e incluso hemos realizado campos más complejos como calcular, dependiendo de la media de goles recibidos y encajados y la media del equipo correspondiente, si un equipo tiene buena/mala defensa y buen/mal ataque. Este sería el código correspondiente para calcular dicho campo:
 
   IF [avg_goals_for] > { FIXED : AVG([avg_goals_for]) }
   THEN "Mucho ataque"
   ELSE "Poco ataque"
   END
-  + " / " +
+  +" / "+
   IF [avg_goals_against] < { FIXED : AVG([avg_goals_against]) }
   THEN "Mucha defensa"
   ELSE "Poca defensa"
@@ -233,6 +235,7 @@ Sigue estos pasos para replicar el proyecto en tu entorno local:
 Desarrollado con 💻 y ⚽ por:
 * **Adrián García García** - [GitHub](https://github.com/4drian04) | [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-garc%C3%ADa-garc%C3%ADa-6ab399333/)
 * **David Caraballo Bulnes** - [GitHub](https://github.com/DavidCaraballoBulnes) | [LinkedIn](https://www.linkedin.com/in/david-caraballo-bulnes-791968239/)
+
 
 
 
