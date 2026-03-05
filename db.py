@@ -185,10 +185,10 @@ def create_player_tables():
             height REAL,
             weight INTEGER,
             games_played INTEGER,
-            starts INTEGER,
             subs INTEGER,
             goals INTEGER,
             assists INTEGER,
+            shoots INTEGER,
             shots_on_target INTEGER,
             fouls_committed INTEGER,
             fouls_received INTEGER,
@@ -316,7 +316,7 @@ def insert_players_from_dataframe(df_porteros, df_campo):
     sql_campo = """
         INSERT INTO field_players (
             name, dorsal, position, age, nationality, height, weight,
-            games_played, starts, subs, goals, assists, shots_on_target,
+            games_played, subs, goals, assists, shoots, shots_on_target,
             fouls_committed, fouls_received, yellow_cards, red_cards,
             team_id, league_id
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -332,7 +332,7 @@ def insert_players_from_dataframe(df_porteros, df_campo):
             batch_campo.append((
                 row['NOMBRE'], row['DORSAL'], row['POS'], row['EDAD'], row['NAC'],
                 row['ALTURA_M'], row['PESO_KG'], row['PARTIDOS_JUGADOS'],
-                row['TITULAR'], row['SUPLENTE'], row['GOLES'], row['ASISTENCIAS'],
+                row['SUPLENTE'], row['GOLES'], row['ASISTENCIAS'], row['TIROS'],
                 row['TIROS_PUERTA'], row['FALTAS_COMETIDAS'], row['FALTAS_RECIBIDAS'],
                 row['TARJETAS_AMARILLAS'], row['TARJETAS_ROJAS'],
                 team_id, league_id

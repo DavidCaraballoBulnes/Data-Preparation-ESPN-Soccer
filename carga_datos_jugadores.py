@@ -266,7 +266,7 @@ def convert_to_polars(dfs_list, player_type):
     else: 
         mapping = {
             "AP": "PARTIDOS_JUGADOS", "G": "GOLES", "A": "ASISTENCIAS", 
-            "TT": "TITULAR", "SUB": "SUPLENTE", "TM": "TIROS_PUERTA", 
+            "TT": "TIROS", "SUB": "SUPLENTE", "TM": "TIROS_PUERTA", 
             "FC": "FALTAS_COMETIDAS", "FS": "FALTAS_RECIBIDAS", "TA": "TARJETAS_AMARILLAS", 
             "TR": "TARJETAS_ROJAS", "P": "PESO_KG", "EST": "ALTURA_M"
         }
