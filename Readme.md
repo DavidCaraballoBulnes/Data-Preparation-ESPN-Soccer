@@ -45,7 +45,7 @@ El flujo del proyecto se divide en las siguientes fases metodológicas:
 ## 📂 Estructura de directorios
 
 ```
-Obtencion-Almacenamiento-Datos/
+Data-Preparation-ESPN-Soccer/
 ├── main.py                         # Script principal (Web Scraping / API requests)
 ├── carga_datos.py                  # Carga los datos de las diferentes ligas e inserta los datos de los distintos jugadores
 ├── carga_datos_jugadores.py        # Obtiene los datos de todos los jugadores de las diferentes ligas (Scraping)
@@ -58,6 +58,95 @@ Obtencion-Almacenamiento-Datos/
 └── data_output/                    # CSVs de los datos utilizados para generar los distintos gráficos.
 ```
 
+## Estructura relacional
+
+| Tabla | Descripción | Contenido Principal |
+| :--- | :--- | :--- |
+| **`league`** | Almacena la información de las diferentes ligas. | Identificador de la liga, nombre de la competición (ej. LALIGA, Premier League) y la temporada/año. |
+| **`teams`** | Contiene el registro de los equipos de fútbol que participan en las ligas. | Nombre del equipo, URL de su escudo o logo, y la referencia a la liga (`league_id`) en la que compiten. |
+| **`stats`** | Guarda las estadísticas acumuladas y la clasificación de cada equipo en su liga. | Puntos, partidos jugados, victorias, empates, derrotas, goles a favor/en contra y la posición en la tabla de clasificación. |
+| **`field_players`** | Registra la información personal y las métricas de rendimiento de los jugadores de campo (todos menos los porteros). | Nombre, edad, nacionalidad, posición, métricas ofensivas/defensivas (goles, asistencias, tiros a puerta, faltas, tarjetas) y a qué equipo/liga pertenecen. |
+| **`goalkeepers`** | Registra la información personal y las estadísticas específicas de los porteros. | Nombre, edad, nacionalidad, métricas exclusivas de su posición (paradas, goles encajados, tarjetas) y a qué equipo/liga pertenecen. |
+
+```mermaid
+erDiagram
+    league {
+        INTEGER id_league PK
+        TEXT name_league
+        INTEGER year
+    }
+    
+    teams {
+        INTEGER id PK
+        TEXT name
+        TEXT logo
+        INTEGER league_id FK
+    }
+    
+    stats {
+        INTEGER id_stats PK
+        INTEGER team_id FK
+        INTEGER points
+        INTEGER played
+        INTEGER goals_against
+        INTEGER goals_for
+        INTEGER wins
+        INTEGER draws
+        INTEGER losses
+        TEXT position
+    }
+    
+    field_players {
+        INTEGER id PK
+        TEXT name
+        INTEGER dorsal
+        TEXT position
+        INTEGER age
+        TEXT nationality
+        REAL height
+        INTEGER weight
+        INTEGER games_played
+        INTEGER starts
+        INTEGER subs
+        INTEGER goals
+        INTEGER assists
+        INTEGER shots_on_target
+        INTEGER fouls_committed
+        INTEGER fouls_received
+        INTEGER yellow_cards
+        INTEGER red_cards
+        INTEGER team_id FK
+        INTEGER league_id FK
+    }
+    
+    goalkeepers {
+        INTEGER id PK
+        TEXT name
+        INTEGER dorsal
+        TEXT position
+        INTEGER age
+        TEXT nationality
+        REAL height
+        INTEGER weight
+        INTEGER games_played
+        INTEGER saves
+        INTEGER goals_conceded
+        INTEGER fouls_committed
+        INTEGER fouls_received
+        INTEGER yellow_cards
+        INTEGER red_cards
+        INTEGER team_id FK
+        INTEGER league_id FK
+    }
+
+    %% Relaciones
+    teams }|--|| league : "pertenece a (league_id -> id_league)"
+    stats }|--|| teams : "tiene (team_id -> id)"
+    field_players }|--|| league : "juega en (league_id -> id_league)"
+    field_players }|--|| teams : "pertenece a (team_id -> id)"
+    goalkeepers }|--|| league : "juega en (league_id -> id_league)"
+    goalkeepers }|--|| teams : "pertenece a (team_id -> id)"
+```
 ---
 
 ## 📊 Visualizaciones y Análisis de Datos
@@ -237,6 +326,7 @@ Sigue estos pasos para replicar el proyecto en tu entorno local:
 Desarrollado con 💻 y ⚽ por:
 * **Adrián García García** - [GitHub](https://github.com/4drian04) | [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-garc%C3%ADa-garc%C3%ADa-6ab399333/)
 * **David Caraballo Bulnes** - [GitHub](https://github.com/DavidCaraballoBulnes) | [LinkedIn](https://www.linkedin.com/in/david-caraballo-bulnes-791968239/)
+
 
 
 
