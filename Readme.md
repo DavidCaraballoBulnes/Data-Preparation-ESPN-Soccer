@@ -42,9 +42,9 @@ El flujo del proyecto se divide en las siguientes fases metodológicas:
 3.  **Procesamiento (ETL - Transform):** Para el análisis, utilizamos la función `read_database_uri` de **Polars**. Lanzamos consultas SQL directas para generar DataFrames rápidos y optimizados.
 4.  **Filtrado Modular:** A partir del DataFrame maestro, aplicamos métodos `.drop()` y filtros específicos para aislar las variables exactas necesarias para cada visualización, optimizando el consumo de memoria.
 
-<details>
-<summary>📂 Ver estructura de directorios</summary>
+## 📂 Estructura de directorios
 
+```
 Obtencion-Almacenamiento-Datos/
 ├── main.py                         # Script principal (Web Scraping / API requests)
 ├── carga_datos.py                  # Carga los datos de las diferentes ligas e inserta los datos de los distintos jugadores
@@ -52,9 +52,11 @@ Obtencion-Almacenamiento-Datos/
 ├── db.py                           # Gestión y conexión con SQLite
 ├── soccer.db                       # Base de datos relacional
 ├── README.md                       # Documentación
-└── graficos/                       # HTMLs interactivos generados por Plotly
-
-</details>
+├── index.html                      # Página web que centraliza todos los gráficos generados
+├── requirements.txt                # Documento que reúne todas las librerías necesarias para la ejecución del proyecto
+├── graficos/                       # HTMLs interactivos generados por Plotly
+└── data_output/                    # CSVs de los datos utilizados para generar los distintos gráficos.
+```
 
 ---
 
@@ -235,6 +237,7 @@ Sigue estos pasos para replicar el proyecto en tu entorno local:
 Desarrollado con 💻 y ⚽ por:
 * **Adrián García García** - [GitHub](https://github.com/4drian04) | [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-garc%C3%ADa-garc%C3%ADa-6ab399333/)
 * **David Caraballo Bulnes** - [GitHub](https://github.com/DavidCaraballoBulnes) | [LinkedIn](https://www.linkedin.com/in/david-caraballo-bulnes-791968239/)
+
 
 
 
