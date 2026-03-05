@@ -106,10 +106,10 @@ erDiagram
         REAL height
         INTEGER weight
         INTEGER games_played
-        INTEGER starts
         INTEGER subs
         INTEGER goals
         INTEGER assists
+        INTEGER shoots
         INTEGER shots_on_target
         INTEGER fouls_committed
         INTEGER fouls_received
@@ -326,6 +326,7 @@ Sigue estos pasos para replicar el proyecto en tu entorno local:
 Desarrollado con 💻 y ⚽ por:
 * **Adrián García García** - [GitHub](https://github.com/4drian04) | [LinkedIn](https://www.linkedin.com/in/adri%C3%A1n-garc%C3%ADa-garc%C3%ADa-6ab399333/)
 * **David Caraballo Bulnes** - [GitHub](https://github.com/DavidCaraballoBulnes) | [LinkedIn](https://www.linkedin.com/in/david-caraballo-bulnes-791968239/)
+
 
 
 
