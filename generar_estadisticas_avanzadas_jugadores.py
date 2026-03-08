@@ -3,6 +3,9 @@ import time
 import unicodedata
 from understatapi import UnderstatClient
 import LanusStats as ls
+import Scrapping as sc
+import sys
+sys.stdout.reconfigure(encoding='utf-8')
 
 # --- EL PARCHE NINJA PARA PANDAS ---
 if not hasattr(pd.DataFrame, 'applymap'):
@@ -21,7 +24,7 @@ def limpiar_nombre(nombre):
 def obtener_datos_understat(temporada="2025"):
     """Descarga los datos base ofensivos y de xG desde Understat (Sin La Liga)."""
     # Hemos quitado 'La_Liga' de aquí
-    ligas = ['EPL', 'Bundesliga', 'Serie_A', 'Ligue_1'] 
+    ligas = ['La_Liga','EPL', 'Bundesliga', 'Serie_A', 'Ligue_1'] 
     todos_los_jugadores = []
 
     print("\n[1/2] Iniciando descarga masiva desde UnderstatAPI...")
@@ -58,8 +61,9 @@ def obtener_datos_understat(temporada="2025"):
 
 def obtener_defensa_fbref(df_base, temporada_fbref="2025-2026"):
     """Descarga las entradas (tackles) desde FBRef y las une al DataFrame base."""
-    fbref = ls.Fbref()
+    fbref = sc.Fbref()
     ligas_fbref = {
+        'La_Liga': 'La Liga',
         'EPL': 'Premier League',
         'Bundesliga': 'Bundesliga',
         'Serie_A': 'Serie A',
@@ -97,8 +101,8 @@ def obtener_defensa_fbref(df_base, temporada_fbref="2025-2026"):
                 
                 datos_defensa_fbref.append(df_limpio)
                 exito = True 
-                print("  ✅ ¡Éxito! Esperando 15 segundos para la próxima liga...")
-                time.sleep(15)
+                print("  ✅ ¡Éxito! Esperando 10 segundos para la próxima liga...")
+                time.sleep(10)
                 
             except Exception as e:
                 print(f"  ⚠️ Error en el intento {intentos} con {liga_fb}: {e}")
