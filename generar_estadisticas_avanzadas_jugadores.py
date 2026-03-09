@@ -2,7 +2,6 @@ import pandas as pd
 import time
 import unicodedata
 from understatapi import UnderstatClient
-import LanusStats as ls
 import Scrapping as sc
 import sys
 sys.stdout.reconfigure(encoding='utf-8')
