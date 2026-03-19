@@ -47,6 +47,9 @@ El flujo del proyecto se divide en las siguientes fases metodológicas:
 ```
 Data-Preparation-ESPN-Soccer/
 ├── main.py                         # Script principal (Web Scraping / API requests)
+├── hyperparameters_optimization.py # Busca los mejores hiperparámetros para  el RandomForest
+├── skew_calculator.py              # Comprueba si eliminando los sesgos mejora el rendimiento del modelo
+├── model_comparator.py             # Comprueba cual es el mejor modelo de un conjunto
 ├── carga_datos.py                  # Carga los datos de las diferentes ligas e inserta los datos de los distintos jugadores
 ├── carga_datos_jugadores.py        # Obtiene los datos de todos los jugadores de las diferentes ligas (Scraping)
 ├── db.py                           # Gestión y conexión con SQLite
@@ -54,8 +57,10 @@ Data-Preparation-ESPN-Soccer/
 ├── README.md                       # Documentación
 ├── index.html                      # Página web que centraliza todos los gráficos generados
 ├── requirements.txt                # Documento que reúne todas las librerías necesarias para la ejecución del proyecto
-├── graficos/                       # HTMLs interactivos generados por Plotly
+├── model_info/                     # Imágenes acerca del modelo (Matriz de confusión, features important)
+├── graphics/                       # HTMLs interactivos generados por Plotly
 └── data_output/                    # CSVs de los datos utilizados para generar los distintos gráficos.
+
 ```
 
 ## Estructura relacional
