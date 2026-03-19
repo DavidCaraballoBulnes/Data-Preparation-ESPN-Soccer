@@ -298,6 +298,53 @@ erDiagram
 
 ---
 
+# ⚽ Predicción de Posiciones de Jugadores de Fútbol mediante Machine Learning
+
+## 📖 Descripción del Apartado
+
+Este apartado supone la transición de un análisis de datos descriptivo a un **análisis predictivo**. El objetivo principal es clasificar y predecir la posición táctica principal de un jugador de fútbol (Defensa, Delantero, Portero, Centrocampista o Segundo delantero) basándonos en sus estadísticas de juego avanzadas (goles esperados, xGChain, pases clave, minutos jugados, etc.). 
+
+## ⚙️ Metodología y Preprocesamiento
+
+Para preparar los datos para el modelado, se llevaron a cabo los siguientes pasos:
+1. **Limpieza de la variable objetivo:** Muchos jugadores tienen múltiples posiciones. Nos quedamos exclusivamente con la primera posición (la principal) para entrenar el modelo.
+2. **Feature Engineering:** - Se crearon métricas normalizadas por partido (`tackles_per_game`, `goals_per_game`, etc.) para compensar la diferencia de minutos jugados entre futbolistas.
+   - Se aplicó `PolynomialFeatures (degree=2)` para capturar relaciones no lineales y multiplicativas entre las variables, lo cual mejoró significativamente el rendimiento.
+3. **Análisis de Sesgo:** Evaluamos transformaciones Logarítmicas y de Yeo-Johnson para variables asimétricas (como `time` o `xG`). Tras pruebas empíricas, se descartaron a favor del rendimiento computacional, ya que el modelo final demostró robustez ante estas distribuciones.
+
+## 🤖 Selección y Ajuste del Modelo
+
+Para asegurar la mejor elección del algoritmo, implementamos una estrategia comparativa evaluando 5 modelos diferentes (KNN, SVM, Decision Tree, Random Forest y Gradient Boosting), tanto con datos escalados como no escalados. 
+
+**Criterio de elección:** El **Random Forest Classifier (con datos no escalados)** fue seleccionado como el algoritmo óptimo al superar consistentemente al resto de modelos en las métricas de precisión, recall y F1-Score.
+
+Para maximizar su rendimiento y controlar el sobreajuste (*overfitting*), utilizamos `GridSearchCV` para encontrar los hiperparámetros óptimos (como `n_estimators=200` y `max_depth=20`).
+
+## 📊 Resultados e Interpretación de Métricas
+
+### 1. Matriz de Confusión
+![Matriz de Confusión](model_info/matriz_confusion.png)
+
+**Interpretación:** El modelo es excelente detectando Porteros (clase 2) y Segundos Delanteros (clase 4). Observamos que existe cierta confusión entre Defensas y Centrocampistas. Lejos de ser un error, esto indica que el modelo aprende patrones tácticos reales, ya que muchos centrocampistas de corte defensivo comparten perfiles estadísticos casi idénticos a los defensas centrales o laterales.
+
+### 2. Curva ROC-AUC multiclase
+![Curva ROC](model_info/curva_roc.png)
+
+**Interpretación:** La capacidad de discriminación es casi perfecta para los porteros (AUC = 1.00) y segundos delanteros (AUC = 0.99). Las clases de delanteros y defensas mantienen un área bajo la curva muy sólida, demostrando la fiabilidad general del modelo.
+
+### 3. Importancia de Características (Feature Importance)
+![Feature Importance](model_info/importancia_caracteristicas.png)
+
+**Valor aportado:** Este gráfico nos permite entender el "por qué" de las decisiones del modelo. Descubrimos que el tiempo de juego, combinado de forma polinómica con métricas avanzadas como el `xGBuildup` (goles esperados de una jugada ofensiva excluyendo la asistencia y el tiro), son los factores más determinantes para definir el rol táctico de un jugador.
+
+### 4. Estructura de Decisión (Árbol del Bosque)
+![Árbol de Decisión](model_info/arbol_decision.png)
+
+Una vista parcial a cómo razona el algoritmo: la primera gran división táctica que hace el modelo es evaluar si el jugador realiza más o menos de 1.5 tiros. A partir de ahí, ramifica las decisiones combinando el tiempo jugado y los goles esperados.
+
+## 🏁 Conclusiones
+
+El modelado aplicado ha demostrado que es posible traducir el rendimiento estadístico bruto en perfiles tácticos definidos. Aunque el modelo presenta un Accuracy en entrenamiento de 0.97 y en test de 0.71, hemos validado que esta diferencia se debe a la naturaleza multiclase y a la similitud real entre ciertas posiciones (como los centrocampistas defensivos), confirmando que **el algoritmo generaliza patrones y no memoriza datos**.
 ## 🛠️ Stack Tecnológico
 
 * **Lenguaje:** Python 3
