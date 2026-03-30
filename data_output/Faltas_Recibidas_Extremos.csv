@@ -1,14 +1,14 @@
-player_id,player_name,dorsal,position,age,nationality,height,weight,games_played,starts,subs,shots_on_target,fouls_committed,fouls_received,yellow_cards,red_cards,player_team_id,player_league_id,team_id,team_logo,team_league_id,id_league,league_year,fouls_per_game
-57,Nico Williams,10,A,23,España,1.8,67,19,37,4,13,17,23,1,0,10,1,10,https://a.espncdn.com/i/teamlogos/soccer/500/93.png,1,1,2025-2026,1.2105263157894737
-82,Thiago Almada,11,M,24,Argentina,1.7,63,18,17,9,10,4,12,1,0,3,1,3,https://a.espncdn.com/i/teamlogos/soccer/500/1068.png,1,1,2025-2026,0.6666666666666666
-120,Lamine Yamal,10,A,18,España,1.78,72,22,96,1,33,21,44,0,0,1,1,1,https://a.espncdn.com/i/teamlogos/soccer/500/83.png,1,1,2025-2026,2.0
-121,Raphinha,11,A,29,Brasil,1.75,72,17,50,2,14,8,9,3,0,1,1,1,https://a.espncdn.com/i/teamlogos/soccer/500/83.png,1,1,2025-2026,0.5294117647058824
-122,Marcus Rashford,14,A,28,Inglaterra,1.88,78,22,64,9,21,5,18,2,0,1,1,1,https://a.espncdn.com/i/teamlogos/soccer/500/83.png,1,1,2025-2026,0.8181818181818182
-411,Antony,7,A,26,Brasil,1.75,63,21,62,0,26,13,33,2,1,5,1,5,https://a.espncdn.com/i/teamlogos/soccer/500/244.png,1,1,2025-2026,1.5714285714285714
-448,Vinícius Júnior,7,A,25,Brasil,1.75,73,25,71,3,30,25,58,7,0,2,1,2,https://a.espncdn.com/i/teamlogos/soccer/500/86.png,1,1,2025-2026,2.32
-544,Chidera Ejuke,21,A,28,Nigeria,1.75,72,19,16,15,1,1,10,0,0,13,1,13,https://a.espncdn.com/i/teamlogos/soccer/500/243.png,1,1,2025-2026,0.5263157894736842
-572,Arnaut Danjuma,7,A,29,Holanda,1.78,73,24,32,7,13,19,22,0,0,17,1,17,https://a.espncdn.com/i/teamlogos/soccer/500/94.png,1,1,2025-2026,0.9166666666666666
-811,Alejandro Garnacho,49,A,21,Argentina,1.8,73,18,25,5,6,8,19,1,0,25,2,25,https://a.espncdn.com/i/teamlogos/soccer/500/363.png,2,2,2025-2026,1.0555555555555556
-944,Mohamed Salah,11,A,33,Egipto,1.75,71,21,54,2,14,10,16,1,0,26,2,26,https://a.espncdn.com/i/teamlogos/soccer/500/364.png,2,2,2025-2026,0.7619047619047619
-977,Jérémy Doku,11,A,23,Bélgica,1.73,66,21,21,8,8,17,38,0,0,22,2,22,https://a.espncdn.com/i/teamlogos/soccer/500/382.png,2,2,2025-2026,1.8095238095238095
-1194,Rafael Leão,10,A,26,Portugal,1.88,81,20,45,4,22,17,29,3,0,42,3,42,https://a.espncdn.com/i/teamlogos/soccer/500/103.png,3,3,2025-2026,1.45
+player_id,player_name,dorsal,position,age,nationality,height,weight,games_played,subs,shots_on_target,fouls_committed,fouls_received,yellow_cards,red_cards,player_team_id,player_league_id,team_id,team_logo,team_league_id,id_league,league_year,fouls_per_game
+58,Nico Williams,10,A,23,España,1.8,67,19,4,13,17,23,1,0,9,1,9,https://a.espncdn.com/i/teamlogos/soccer/500/93.png,1,1,2025-2026,1.2105263157894737
+83,Thiago Almada,11,M,24,Argentina,1.7,63,20,9,10,7,12,1,0,4,1,4,https://a.espncdn.com/i/teamlogos/soccer/500/1068.png,1,1,2025-2026,0.6
+122,Lamine Yamal,10,A,18,España,1.78,72,25,2,34,24,47,1,0,1,1,1,https://a.espncdn.com/i/teamlogos/soccer/500/83.png,1,1,2025-2026,1.88
+123,Raphinha,11,A,29,Brasil,1.75,72,20,3,19,10,9,4,0,1,1,1,https://a.espncdn.com/i/teamlogos/soccer/500/83.png,1,1,2025-2026,0.45
+124,Marcus Rashford,14,A,28,Inglaterra,1.88,78,24,10,22,6,19,2,0,1,1,1,https://a.espncdn.com/i/teamlogos/soccer/500/83.png,1,1,2025-2026,0.7916666666666666
+416,Antony,7,A,26,Brasil,1.75,63,24,2,27,14,35,4,1,5,1,5,https://a.espncdn.com/i/teamlogos/soccer/500/244.png,1,1,2025-2026,1.4583333333333333
+455,Vinícius Júnior,7,A,25,Brasil,1.75,73,28,3,35,25,61,7,0,2,1,2,https://a.espncdn.com/i/teamlogos/soccer/500/86.png,1,1,2025-2026,2.1785714285714284
+553,Chidera Ejuke,21,A,28,Nigeria,1.75,72,21,17,2,3,11,0,0,15,1,15,https://a.espncdn.com/i/teamlogos/soccer/500/243.png,1,1,2025-2026,0.5238095238095238
+581,Arnaut Danjuma,7,A,29,Holanda,1.78,73,26,8,14,20,22,0,0,12,1,12,https://a.espncdn.com/i/teamlogos/soccer/500/94.png,1,1,2025-2026,0.8461538461538461
+821,Alejandro Garnacho,49,A,21,Argentina,1.8,73,20,6,7,8,19,2,0,26,2,26,https://a.espncdn.com/i/teamlogos/soccer/500/363.png,2,2,2025-2026,0.95
+954,Mohamed Salah,11,A,33,Egipto,1.75,71,22,3,14,10,16,1,0,25,2,25,https://a.espncdn.com/i/teamlogos/soccer/500/364.png,2,2,2025-2026,0.7272727272727273
+987,Jérémy Doku,11,A,23,Bélgica,1.73,66,22,9,8,17,40,0,0,22,2,22,https://a.espncdn.com/i/teamlogos/soccer/500/382.png,2,2,2025-2026,1.8181818181818181
+1205,Rafael Leão,10,A,26,Portugal,1.88,81,22,4,23,17,30,3,0,42,3,42,https://a.espncdn.com/i/teamlogos/soccer/500/103.png,3,3,2025-2026,1.3636363636363635

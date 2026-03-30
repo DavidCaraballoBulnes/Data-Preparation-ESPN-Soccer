@@ -337,7 +337,6 @@ SELECT
     fp.height,
     fp.weight,
     fp.games_played,
-    fp.starts,
     fp.subs,
     fp.goals,
     fp.assists,

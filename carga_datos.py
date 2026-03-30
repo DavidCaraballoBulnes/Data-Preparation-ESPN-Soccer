@@ -50,18 +50,18 @@ for nombre_liga, url in ligas_urls.items():
     db.insert_leagues(liga) # Insertamos la liga
     db.insert_teams(list(equipos.values())[0]) # Insertamos los equipos correspondientes obtenidos anteriormente
 
-    # Gráficas por liga
-    plt.barh(listaEquipos, golesAFavor, color='skyblue') # Creamos la gráfica para los goles a favor
-    plt.xlabel('Goles a favor') # Se pone un título al eje x
-    plt.ylabel('Equipos') # Un título al eje y
-    plt.title(f'Goles a favor de los equipos en {nombre_liga}') # Un título para la gráfica con el nombre de la liga
-    plt.show() # Se muestra
+    # # Gráficas por liga
+    # plt.barh(listaEquipos, golesAFavor, color='skyblue') # Creamos la gráfica para los goles a favor
+    # plt.xlabel('Goles a favor') # Se pone un título al eje x
+    # plt.ylabel('Equipos') # Un título al eje y
+    # plt.title(f'Goles a favor de los equipos en {nombre_liga}') # Un título para la gráfica con el nombre de la liga
+    # plt.show() # Se muestra
 
-    plt.barh(listaEquipos, golesEnContra, color='tomato') # Creamos la gráfica para los goles en contra
-    plt.xlabel('Goles en contra')
-    plt.ylabel('Equipos')
-    plt.title(f'Goles en contra de los equipos en {nombre_liga}') # Un título para la gráfica con el nombre de la liga
-    plt.show()
+    # plt.barh(listaEquipos, golesEnContra, color='tomato') # Creamos la gráfica para los goles en contra
+    # plt.xlabel('Goles en contra')
+    # plt.ylabel('Equipos')
+    # plt.title(f'Goles en contra de los equipos en {nombre_liga}') # Un título para la gráfica con el nombre de la liga
+    # plt.show()
 
 db.create_player_tables()
 
