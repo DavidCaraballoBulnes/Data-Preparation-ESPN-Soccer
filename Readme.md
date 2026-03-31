@@ -276,12 +276,17 @@ erDiagram
 
 - Dashboards
   
+  - Dashboard estadísticas de equipos (<a href="https://public.tableau.com/app/profile/adri.n.garc.a.garc.a/viz/3_2_GarciaGarcia_CaraballoBulnes/Dashboard1">enlace público a Tableau Public</a>)
+  
+
 
   <img width="1920" height="981" alt="Dashboard_Tableau_Equipos" src="https://github.com/user-attachments/assets/b5e52a20-c466-4933-a447-a80790c1f465" />
   
 
   ---
   
+  - Dashboard de estadísticas de extremos (<a href="https://public.tableau.com/app/profile/adri.n.garc.a.garc.a/viz/3_2_GarciaGarcia_CaraballoBulnes/Dashboard3">enlace público a Tableau Public</a>)
+
 
   <img width="1920" height="1008" alt="Dashboard_Tableau" src="https://github.com/user-attachments/assets/bab1667b-dedd-435f-af9c-223d26c1cb98" />
   
