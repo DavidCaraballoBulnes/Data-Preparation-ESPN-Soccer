@@ -50,6 +50,7 @@ Data-Preparation-ESPN-Soccer/
 ├── hyperparameters_optimization.py # Busca los mejores hiperparámetros para  el RandomForest
 ├── skew_calculator.py              # Comprueba si eliminando los sesgos mejora el rendimiento del modelo
 ├── model_comparator.py             # Comprueba cual es el mejor modelo de un conjunto
+├── predict_model.py                # Hace el entrenamiento del modelo final y hace predicciones del conjunto de testing, calculando además las métricas correspondientes
 ├── carga_datos.py                  # Carga los datos de las diferentes ligas e inserta los datos de los distintos jugadores
 ├── carga_datos_jugadores.py        # Obtiene los datos de todos los jugadores de las diferentes ligas (Scraping)
 ├── db.py                           # Gestión y conexión con SQLite
